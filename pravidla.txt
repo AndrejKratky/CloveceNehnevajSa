@@ -1,0 +1,33 @@
+_________________________________________CLOVECE NEHNEVAJ SA_____________________________________________
+    Ciel hry:
+        Cielom kazdeho hraca je doviest vsetky svoje figurky cez celu hraciu plochu do ciela,
+        oznaceneho jeho farbou. clovece-nehnevaj-sa
+    Zaciatok hry:
+        Hra je pre dvoch az styroch hracov. Kazdy hrac ma k dispozicii styri hracie figurky
+        rovnakej farby, pricom v tejto verzii pravidiel nezacina hrac z prvou figurkou na
+        startovacom policku. Ako prvy je na tahu hrac, ktoreho nahodne vyberie pocitac.
+    Tah hraca:
+        Ak hrac nema na hracom poli ziadne figurky, hadze 3krat kockou. Pokial sa mu pocas
+        tychto troch hodou nepodari hodit 6, musi pockat, kym bude znovu na tahu a ide
+        dalsi hrac. Ak sa mu podari hodit 6, presunie jednu zo svojich figuriek na startovacie
+        policko.
+        Ak hrac ma na svojom hracom poli aspon jednu figurku, moze hadzat kockou.
+        V pripade, ak hodi cislo mensie ako 6, posunie sa zo svojou figurkou dopredu po ceste
+        urcenej hracou plochou. V pripade, ak hrac hodi cislo 6, moze urobit jeden z nasledujucich
+        tahov:
+            1. Presunut jednu zo svojich figuriek na startovacie policko, pokial sa na tomto
+                policku nenacha figurka rovnakej farby.
+            2. Posunut sa zo svojou figurkou dopredu po ceste urcenej hracou plochou.
+        Hrac, ktory hodil sestku moze hadzat kockou znova.
+    Vyhodenie figurky:
+        Na jednom policku sa nemozu nechadzat dve alebo viacej figurok. Vzdy plati, ze figurka,
+        ktora prave prisla (resp. skocila) na dane policko vyhadzuje figurku, ktorá tam stála
+        predtým. Hrac si avsak nemoze vyhodit svoju vlastnu figurku. Ak nastane situacia, kedy
+        by si mal hrac vyhodit svoju vlastnu figurku, prichadzajuca figurka skoci o jedno policko
+        dalej. Toto pravidlo "preskocenia" neplati, pokial sa jedna o cielove policko.
+    Koniec hry:
+        Cielom hry je dostat vsetky svoje figurky do ciela rovnakej farby. Cielove pole sa moze
+        obsadit figurkou iba vtedy ak hrac dosiahne hodom kockou presne tolko bodov kolko ich este
+        k dosiahnutiu urciteho cieloveho pola potrebuje. Ked dosiahne iny pocet bodov nez je potrebny
+        k umiestneniu figurky, postupi po hracej drahe inou figurkou alebo caka na dalsi hod kockou.
+_________________________________________________________________________________________________________

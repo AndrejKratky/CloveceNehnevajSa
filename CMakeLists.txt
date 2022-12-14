@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.18)
+project(CloveceNehnevajSa C)
+set(CMAKE_C_STANDARD 99)
+add_executable(CloveceNehnevajSa main.c)
+target_link_libraries(CloveceNehnevajSa pthread)

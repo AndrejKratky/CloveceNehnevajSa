@@ -92,6 +92,8 @@ char* dajRiadokPolicka(POLICKO* policko, int riadok) {
     return riadokPolicka;
 }
 
+
+
 void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
     if (p_typPolicka == Horizontalne) {
         for (int i = 0; i < 3; ++i) {

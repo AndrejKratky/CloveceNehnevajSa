@@ -7,6 +7,11 @@
 /**
  * Jednotlive typy policok su zapisane v Exceli
  * */
+
+/**
+    push test
+**/
+
 typedef enum typyPolicok {
     Horizontalne,
     Vertikalne,
@@ -91,8 +96,6 @@ char* dajRiadokPolicka(POLICKO* policko, int riadok) {
     }
     return riadokPolicka;
 }
-
-
 
 void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
     if (p_typPolicka == Horizontalne) {

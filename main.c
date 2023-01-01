@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <ctype.h>
 
 /**
  * Jednotlive typy policok su zapisane v Exceli
@@ -294,6 +295,25 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
     }
 }
 
+void nastavObsahPolickaFigurka(POLICKO* policko, FARBA_HRACA p_farba) {
+    switch (p_farba) {
+        case Cervena:
+            policko->obsahPolicka[1][1] = 'R';
+            break;
+        case Modra:
+            policko->obsahPolicka[1][1] = 'B';
+            break;
+        case Zelena:
+            policko->obsahPolicka[1][1] = 'G';
+            break;
+        case Zlta:
+            policko->obsahPolicka[1][1] = 'Y';
+            break;
+        default:
+            break;
+    }
+}
+
 /**
  * Stav prazdnych policok sa nemusi aktualizovat, kedze na ne figurka nemoze skocit.
  * Tato funkcia sa zavola len raz v celom programe.
@@ -425,11 +445,16 @@ int skontrolujStavHraca(HRAC* hrac) {
         return 1;   // hrac vyhral
     }
 
+    int pocetFiguriekMimoHracejPlochy = 0;
     for (int i = 0; i < hrac->pocetFiguriek; i++) {
         if(hrac->figurkyHraca[i].poziciaRiadok == -1 && hrac->figurkyHraca[i].poziciaStlpec == -1) {
-            return 2;   // hrac nema ziadnu figurku na hracej ploche
+            pocetFiguriekMimoHracejPlochy++;
         }
     }
+    if (pocetFiguriekMimoHracejPlochy == 4) {
+        return 2;   // hrac nema ziadnu figurku na hracej ploche
+    }
+
     return 3;   // hrac ma aspon jednu figurku na hracej ploche
 }
 
@@ -972,16 +997,33 @@ void priradCestuFigurke(FIGURKA* figurka, FARBA_HRACA farba) {
     }
 }
 
-void presunFigurku(HRAC* hrac, int oKolko, int figurkaID) {
+void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID) {
     int tempPocetPrejdenychPolicok;
-    for (int i = 0; i < hrac->pocetFiguriek; i++) {
-        if (hrac->figurkyHraca[i].figurkaID == figurkaID) {
-            tempPocetPrejdenychPolicok = hrac->figurkyHraca[i].pocetPrejdenychPolicok;
-            hrac->figurkyHraca[i].poziciaRiadok = hrac->figurkyHraca[i].cestaFigurky[tempPocetPrejdenychPolicok + oKolko][0];
-            hrac->figurkyHraca[i].poziciaStlpec = hrac->figurkyHraca[i].cestaFigurky[tempPocetPrejdenychPolicok + oKolko][1];
-            hrac->figurkyHraca[i].pocetPrejdenychPolicok++;
-        }
+    tempPocetPrejdenychPolicok = figurka->pocetPrejdenychPolicok;
+    figurka->poziciaRiadok = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][0];
+    figurka->poziciaStlpec = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][1];
+    figurka->pocetPrejdenychPolicok++;
+}
+
+char* dajFarbuHraca(HRAC* hrac) {
+    char* farbaHracaText;
+    switch (hrac->farbaHraca) {
+        case Cervena:
+            farbaHracaText = "CERVENA";
+            break;
+        case Modra:
+            farbaHracaText = "MODRA";
+            break;
+        case Zelena:
+            farbaHracaText = "ZELENA";
+            break;
+        case Zlta:
+            farbaHracaText = "ZLTA";
+            break;
+        default:
+            break;
     }
+    return farbaHracaText;
 }
 
 int main(int argc, char* argv[]) {
@@ -1136,6 +1178,12 @@ int main(int argc, char* argv[]) {
     int naTahuID = nahodyHracID;
     int hodKockou;
 
+    char inputHry = '\0';               // NULL char alebo nejake cislo, ak je to cislo, konvertuje sa na INT
+    int inputHryPoradoveCisloFigurky;   // hrac moze mat na hracom poli viacero figuriek a moze si vybrat s ktorou pohne
+
+    int poziciaRiadokHraciaPlocha;
+    int poziciaStlpecHraciaPlocha;
+
     nastavHraciuPlochu(hraciaPlocha);
 
     while (koniecHry == 0) {
@@ -1149,23 +1197,43 @@ int main(int argc, char* argv[]) {
                 break;
             case 2:
                 printf("Na tahu: %s\n", hracNaTahu->meno);
-                sleep(5);
+                printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
+                sleep(2);
                 printf("Hrac %s nema na hracej ploche ziadnu figurku!\n", hracNaTahu->meno);
-                sleep(5);
                 for (int i = 0; i < 3; i++) {
+                    printf("Pre hod stlacte ENTER...");
+                    scanf("%c", &inputHry);
+                    if (inputHry != '\0' && isdigit(inputHry)) {
+                        inputHryPoradoveCisloFigurky = atoi(&inputHry);
+                        if (inputHryPoradoveCisloFigurky < 1 || inputHryPoradoveCisloFigurky > 4) {
+                            inputHryPoradoveCisloFigurky = 1;
+                        }
+                    } else {
+                        inputHryPoradoveCisloFigurky = 1;
+                    }
+
                     hodKockou = dajNahodneCisloVRozsahu(1,6);
                     printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
-                    sleep(5);
+                    sleep(2);
                     if (hodKockou == 6) {
                         printf("Hrac %s hodil 6! Presuva figurku na startovacie policko!\n", hracNaTahu->meno);
-                        sleep(5);
-                        presunFigurku(hracNaTahu, 1, 1);
-                        // po predchadzajucom kroku musim nastavit obsah policka podla figurky (yellow, blue...)
+                        sleep(2);
+
+                        FIGURKA* posuvanaFigurka = NULL;
+                        for (int j = 0; j < hracNaTahu->pocetFiguriek; j++) {
+                            if (hracNaTahu->figurkyHraca[j].figurkaID == inputHryPoradoveCisloFigurky) {
+                                posuvanaFigurka = &(hracNaTahu->figurkyHraca[j]);
+                                break;
+                            }
+                        }
+
+                        presunFigurku(posuvanaFigurka, 1, posuvanaFigurka->figurkaID);
+                        poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                        poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                        nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca);
                         break;
                     }
                 }
-                nastavHraciuPlochu(hraciaPlocha);
-                vykresliHraciuPlochu(hraciaPlocha);
 
                 naTahuID++;
                 if (naTahuID > pocetHracov) {

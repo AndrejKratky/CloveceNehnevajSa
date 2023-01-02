@@ -1060,6 +1060,8 @@ int main(int argc, char* argv[]) {
     for(int i = 0; i < pocetHracov; i++) {
         printf("Zadajte meno %d. hraca: ", i + 1);
         scanf("%19s", hraci[i].meno);
+        fflush(stdin);
+
         for (int j = 0; j < pocetHracov; ++j) {
             while (strcmp(hraci[i].meno, zapisaniHraci[j]) == 0) {
                 printf("Zadane meno uz existuje...\n");
@@ -1210,7 +1212,9 @@ int main(int argc, char* argv[]) {
                 printf("Hrac %s nema na hracej ploche ziadnu figurku!\n", hracNaTahu->meno);
                 for (int i = 0; i < 3; i++) {
                     printf("Pre hod stlacte ENTER...");
+                    hodKockou = dajNahodneCisloVRozsahu(1,6);
                     scanf("%c", &inputHry);
+                    fflush(stdin);
                     if (inputHry != '\0' && isdigit(inputHry)) {
                         inputHryPoradoveCisloFigurky = atoi(&inputHry);
                         if (inputHryPoradoveCisloFigurky < 1 || inputHryPoradoveCisloFigurky > 4) {
@@ -1220,7 +1224,7 @@ int main(int argc, char* argv[]) {
                         inputHryPoradoveCisloFigurky = 1;
                     }
 
-                    hodKockou = dajNahodneCisloVRozsahu(1,6);
+
                     printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
                     sleep(1);
                     if (hodKockou == 6) {
@@ -1252,8 +1256,11 @@ int main(int argc, char* argv[]) {
                 printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
                 printf("Hrac %s hadze kockou!\n", hracNaTahu->meno);
                 printf("Pre hod stlacte ENTER...");
-                scanf("");
+
                 hodKockou = dajNahodneCisloVRozsahu(1,6);
+                scanf("%c", &inputHry);
+                fflush(stdin);
+
                 printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
                 if (hodKockou == 6) {
                     int maVolneMiesto = 1;
@@ -1268,6 +1275,7 @@ int main(int argc, char* argv[]) {
                     if (maVolneMiesto) {
                         printf("Hrac pridava na hraciu plochu dalsiu figurku...");
                         scanf("%c", &inputHry);
+                        fflush(stdin);
                         if (inputHry != '\0' && isdigit(inputHry)) {
                             inputHryPoradoveCisloFigurky = atoi(&inputHry);
                             if (inputHryPoradoveCisloFigurky < 1 || inputHryPoradoveCisloFigurky > 4) {
@@ -1294,6 +1302,7 @@ int main(int argc, char* argv[]) {
                 } else {
                     printf("Hrac posuva figurku...");
                     scanf("%c", &inputHry);
+                    fflush(stdin);
                     if (inputHry != '\0' && isdigit(inputHry)) {
                         inputHryPoradoveCisloFigurky = atoi(&inputHry);
                         if (inputHryPoradoveCisloFigurky < 1 || inputHryPoradoveCisloFigurky > 4) {

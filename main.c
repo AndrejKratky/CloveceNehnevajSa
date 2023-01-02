@@ -1011,7 +1011,7 @@ void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID) {
     tempPocetPrejdenychPolicok = figurka->pocetPrejdenychPolicok;
     figurka->poziciaRiadok = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][0];
     figurka->poziciaStlpec = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][1];
-    figurka->pocetPrejdenychPolicok++;
+    figurka->pocetPrejdenychPolicok += oKolko;
 }
 
 char* dajFarbuHraca(HRAC* hrac) {
@@ -1260,6 +1260,7 @@ int main(int argc, char* argv[]) {
                     for (int i = 0; i < hracNaTahu->pocetFiguriek; ++i) {
                         if  (hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok == 0) {
                             printf("Hrac ma na startovacej pozicii figurku. Nemoze pridat dalsiu.");
+                            sleep(1);
                             maVolneMiesto = 0;
                             break;
                         }

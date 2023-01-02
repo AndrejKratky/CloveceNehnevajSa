@@ -184,9 +184,9 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->typPolicka = ZhoraDoprava;
 
     } else if (p_typPolicka == DomovHore) {
-        policko->obsahPolicka[0][0] = '/';
-        policko->obsahPolicka[0][1] = '^';
-        policko->obsahPolicka[0][2] = '\\';
+        policko->obsahPolicka[0][0] = '_';
+        policko->obsahPolicka[0][1] = '_';
+        policko->obsahPolicka[0][2] = '_';
 
         policko->obsahPolicka[1][0] = ' ';
         policko->obsahPolicka[1][1] = ' ';
@@ -200,15 +200,15 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
     } else if (p_typPolicka == DomovVpravo) {
         policko->obsahPolicka[0][0] = '|';
         policko->obsahPolicka[0][1] = ' ';
-        policko->obsahPolicka[0][2] = '\\';
+        policko->obsahPolicka[0][2] = '|';
 
         policko->obsahPolicka[1][0] = '|';
         policko->obsahPolicka[1][1] = ' ';
-        policko->obsahPolicka[1][2] = '>';
+        policko->obsahPolicka[1][2] = '|';
 
         policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
-        policko->obsahPolicka[2][2] = '/';
+        policko->obsahPolicka[2][2] = '|';
         policko->typPolicka = DomovVpravo;
 
     } else if (p_typPolicka == DomovDole) {
@@ -220,21 +220,21 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[1][1] = ' ';
         policko->obsahPolicka[1][2] = ' ';
 
-        policko->obsahPolicka[2][0] = '\\';
-        policko->obsahPolicka[2][1] = 'v';
-        policko->obsahPolicka[2][2] = '/';
+        policko->obsahPolicka[2][0] = '-';
+        policko->obsahPolicka[2][1] = '-';
+        policko->obsahPolicka[2][2] = '-';
         policko->typPolicka = DomovDole;
 
     } else if (p_typPolicka == DomovVlavo) {
-        policko->obsahPolicka[0][0] = '/';
+        policko->obsahPolicka[0][0] = '|';
         policko->obsahPolicka[0][1] = ' ';
         policko->obsahPolicka[0][2] = '|';
 
-        policko->obsahPolicka[1][0] = '<';
+        policko->obsahPolicka[1][0] = '|';
         policko->obsahPolicka[1][1] = ' ';
         policko->obsahPolicka[1][2] = '|';
 
-        policko->obsahPolicka[2][0] = '\\';
+        policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
         policko->obsahPolicka[2][2] = '|';
         policko->typPolicka = DomovVlavo;

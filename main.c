@@ -40,6 +40,7 @@ typedef enum typyPolicok {
  * Atributy :
  *      int jeNaMneHrac -> 1(ano) alebo 0(nie)
  * */
+
 typedef struct policko {
     int jeNaMneHrac;
     TYP_POLICKA typPolicka;

@@ -8,6 +8,11 @@
 /**
  * Jednotlive typy policok su zapisane v Exceli
  * */
+
+/**
+    push test
+**/
+
 typedef enum typyPolicok {
     Horizontalne,
     Vertikalne,
@@ -35,6 +40,7 @@ typedef enum typyPolicok {
  * Atributy :
  *      int jeNaMneHrac -> 1(ano) alebo 0(nie)
  * */
+
 typedef struct policko {
     int jeNaMneHrac;
     TYP_POLICKA typPolicka;
@@ -179,9 +185,9 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->typPolicka = ZhoraDoprava;
 
     } else if (p_typPolicka == DomovHore) {
-        policko->obsahPolicka[0][0] = '/';
-        policko->obsahPolicka[0][1] = '^';
-        policko->obsahPolicka[0][2] = '\\';
+        policko->obsahPolicka[0][0] = '_';
+        policko->obsahPolicka[0][1] = '_';
+        policko->obsahPolicka[0][2] = '_';
 
         policko->obsahPolicka[1][0] = ' ';
         policko->obsahPolicka[1][1] = ' ';
@@ -195,15 +201,15 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
     } else if (p_typPolicka == DomovVpravo) {
         policko->obsahPolicka[0][0] = '|';
         policko->obsahPolicka[0][1] = ' ';
-        policko->obsahPolicka[0][2] = '\\';
+        policko->obsahPolicka[0][2] = '|';
 
         policko->obsahPolicka[1][0] = '|';
         policko->obsahPolicka[1][1] = ' ';
-        policko->obsahPolicka[1][2] = '>';
+        policko->obsahPolicka[1][2] = '|';
 
         policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
-        policko->obsahPolicka[2][2] = '/';
+        policko->obsahPolicka[2][2] = '|';
         policko->typPolicka = DomovVpravo;
 
     } else if (p_typPolicka == DomovDole) {
@@ -215,21 +221,21 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[1][1] = ' ';
         policko->obsahPolicka[1][2] = ' ';
 
-        policko->obsahPolicka[2][0] = '\\';
-        policko->obsahPolicka[2][1] = 'v';
-        policko->obsahPolicka[2][2] = '/';
+        policko->obsahPolicka[2][0] = '-';
+        policko->obsahPolicka[2][1] = '-';
+        policko->obsahPolicka[2][2] = '-';
         policko->typPolicka = DomovDole;
 
     } else if (p_typPolicka == DomovVlavo) {
-        policko->obsahPolicka[0][0] = '/';
+        policko->obsahPolicka[0][0] = '|';
         policko->obsahPolicka[0][1] = ' ';
         policko->obsahPolicka[0][2] = '|';
 
-        policko->obsahPolicka[1][0] = '<';
+        policko->obsahPolicka[1][0] = '|';
         policko->obsahPolicka[1][1] = ' ';
         policko->obsahPolicka[1][2] = '|';
 
-        policko->obsahPolicka[2][0] = '\\';
+        policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
         policko->obsahPolicka[2][2] = '|';
         policko->typPolicka = DomovVlavo;
@@ -312,6 +318,10 @@ void nastavObsahPolickaFigurka(POLICKO* policko, FARBA_HRACA p_farba) {
         default:
             break;
     }
+}
+
+void vyprazdniPolicko(POLICKO* policko) {
+    policko->obsahPolicka[1][1] = ' ';
 }
 
 /**
@@ -1002,7 +1012,7 @@ void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID) {
     tempPocetPrejdenychPolicok = figurka->pocetPrejdenychPolicok;
     figurka->poziciaRiadok = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][0];
     figurka->poziciaStlpec = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][1];
-    figurka->pocetPrejdenychPolicok++;
+    figurka->pocetPrejdenychPolicok += oKolko;
 }
 
 char* dajFarbuHraca(HRAC* hrac) {
@@ -1024,6 +1034,15 @@ char* dajFarbuHraca(HRAC* hrac) {
             break;
     }
     return farbaHracaText;
+}
+
+int jeNaHracejPloche(HRAC* hrac, int idFigurky) {
+    for (int i = 0; i < hrac->pocetFiguriek; ++i) {
+        if (hrac->figurkyHraca[i].pocetPrejdenychPolicok > -1) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 int main(int argc, char* argv[]) {
@@ -1051,6 +1070,8 @@ int main(int argc, char* argv[]) {
     for(int i = 0; i < pocetHracov; i++) {
         printf("Zadajte meno %d. hraca: ", i + 1);
         scanf("%19s", hraci[i].meno);
+        fflush(stdin);
+
         for (int j = 0; j < pocetHracov; ++j) {
             while (strcmp(hraci[i].meno, zapisaniHraci[j]) == 0) {
                 printf("Zadane meno uz existuje...\n");
@@ -1172,7 +1193,7 @@ int main(int argc, char* argv[]) {
     int nahodyHracID = dajNahodneCisloVRozsahu(1,pocetHracov);
     HRAC* hracNaTahu = dajHraca(hraci, pocetHracov, nahodyHracID);
     printf("Zacina hrac: %s\n", hracNaTahu->meno);
-    sleep(2);
+    sleep(1);
     nastavHraciuPlochuPRAZDE(hraciaPlocha);
     int koniecHry = 0;
     int naTahuID = nahodyHracID;
@@ -1198,26 +1219,16 @@ int main(int argc, char* argv[]) {
             case 2:
                 printf("Na tahu: %s\n", hracNaTahu->meno);
                 printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
-                sleep(2);
                 printf("Hrac %s nema na hracej ploche ziadnu figurku!\n", hracNaTahu->meno);
                 for (int i = 0; i < 3; i++) {
                     printf("Pre hod stlacte ENTER...");
-                    scanf("%c", &inputHry);
-                    if (inputHry != '\0' && isdigit(inputHry)) {
-                        inputHryPoradoveCisloFigurky = atoi(&inputHry);
-                        if (inputHryPoradoveCisloFigurky < 1 || inputHryPoradoveCisloFigurky > 4) {
-                            inputHryPoradoveCisloFigurky = 1;
-                        }
-                    } else {
-                        inputHryPoradoveCisloFigurky = 1;
-                    }
-
                     hodKockou = dajNahodneCisloVRozsahu(1,6);
+                    scanf("%c", &inputHry);
+                    fflush(stdin);
                     printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
-                    sleep(2);
+                    sleep(1);
                     if (hodKockou == 6) {
                         printf("Hrac %s hodil 6! Presuva figurku na startovacie policko!\n", hracNaTahu->meno);
-                        sleep(2);
 
                         FIGURKA* posuvanaFigurka = NULL;
                         for (int j = 0; j < hracNaTahu->pocetFiguriek; j++) {
@@ -1241,8 +1252,71 @@ int main(int argc, char* argv[]) {
                 }
                 break;
             case 3:
-                printf("case 3\n");
+                printf("Na tahu: %s\n", hracNaTahu->meno);
+                printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
+
+                int maVolneMiesto = 1;
+                for (int i = 0; i < hracNaTahu->pocetFiguriek; ++i) {
+                    if  (hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok == 0) {
+                        printf("Hrac ma na startovacej pozicii figurku. Nemoze pridat dalsiu.\n");
+                        sleep(1);
+                        maVolneMiesto = 0;
+                        break;
+                    }
+                }
+
+                if (maVolneMiesto) {
+                    printf("Hrac %s hadze kockou!\n", hracNaTahu->meno);
+                    printf("Pre hod stlacte ENTER...");
+                    hodKockou = dajNahodneCisloVRozsahu(1,6);
+                    scanf("%c", &inputHry);
+                    fflush(stdin);
+                    printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
+                    printf("Hrac ma na hracej ploche viacero figurok,\n");
+                    printf("vybera si podla ID figurky.\n");
+
+                    while (!isdigit(inputHry) || (inputHryPoradoveCisloFigurky <= 0 || inputHryPoradoveCisloFigurky >= 5)) {
+                        printf("ZADAJTE CISLO OD 1 DO 4: <ID firgurky>\n");
+                        printf("Opatovny pokus o zadanie: ");
+                        scanf("%c", &inputHry);
+                        fflush(stdin);
+                        inputHryPoradoveCisloFigurky = atoi(&inputHry);
+                        if (jeNaHracejPloche(hracNaTahu, inputHryPoradoveCisloFigurky) == 1) {
+                            break;
+                        } else {
+
+                        }
+                    }
+
+                } else {
+                    printf("Hrac %s hadze kockou!\n", hracNaTahu->meno);
+                    printf("Pre hod stlacte ENTER...");
+                    hodKockou = dajNahodneCisloVRozsahu(1,6);
+                    scanf("%c", &inputHry);
+                    fflush(stdin);
+                    printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
+                    printf("Hrac posuva figurku...\n");
+                    scanf("%c", &inputHry);
+                    fflush(stdin);
+                    FIGURKA* posuvanaFigurka = NULL;
+                    for (int j = 0; j < hracNaTahu->pocetFiguriek; j++) {
+                        if (hracNaTahu->figurkyHraca[j].figurkaID == inputHryPoradoveCisloFigurky) {
+                            posuvanaFigurka = &(hracNaTahu->figurkyHraca[j]);
+                            break;
+                        }
+                    }
+                    vyprazdniPolicko(&hraciaPlocha[posuvanaFigurka->poziciaRiadok][posuvanaFigurka->poziciaStlpec]);
+                    presunFigurku(posuvanaFigurka, hodKockou, posuvanaFigurka->figurkaID);
+                    poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                    poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                    nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca);
+                }
+                naTahuID++;
+                if (naTahuID > pocetHracov) {
+                    naTahuID = 1;
+                }
                 break;
+
             default:
                 printf("default vetva\n");
                 break;

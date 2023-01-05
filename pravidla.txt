@@ -16,9 +16,9 @@ _________________________________________CLOVECE NEHNEVAJ SA____________________
         urcenej hracou plochou. V pripade, ak hrac hodi cislo 6, moze urobit jeden z nasledujucich
         tahov:
             1. Presunut jednu zo svojich figuriek na startovacie policko, pokial sa na tomto
-                policku nenacha figurka rovnakej farby.
-            2. Posunut sa zo svojou figurkou dopredu po ceste urcenej hracou plochou.
-        Hrac, ktory hodil sestku moze hadzat kockou znova.
+                policku nenachadza figurka rovnakej farby.
+            2. Posunut sa zo svojou figurkou dopredu po ceste urcenej hracou plochou, pricom
+                hadze este raz, a posuva sa o sucet tychto dvoch hodov.
     Vyhodenie figurky:
         Na jednom policku sa nemozu nechadzat dve alebo viacej figurok. Vzdy plati, ze figurka,
         ktora prave prisla (resp. skocila) na dane policko vyhadzuje figurku, ktorá tam stála

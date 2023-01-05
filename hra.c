@@ -1,11 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include <ctype.h>
-#include "client.h"
-#include "server.h"
 #include "hra.h"
 
 typedef struct figurka {
@@ -304,7 +296,7 @@ void vyprazdniPolicko(POLICKO* policko) {
  * Stav prazdnych policok sa nemusi aktualizovat, kedze na ne figurka nemoze skocit.
  * Tato funkcia sa zavola len raz v celom programe.
  * */
-void nastavHraciuPlochuPRAZDE(POLICKO p_hraciaPlocha[11][11]) {
+void nastavHraciuPlochuPRAZDE(POLICKO** p_hraciaPlocha) {
     /* PRAZDNE POLICKA */
     for (int i = 0; i <= 3; ++i) {
         for (int j = 0; j <= 3; ++j) {
@@ -334,7 +326,7 @@ void nastavHraciuPlochuPRAZDE(POLICKO p_hraciaPlocha[11][11]) {
  *      1. Bola spustena nova hra.
  *      2. Hrac hodil kockou (resp. chce sa posunut na dalsie policko)
  * */
-void nastavHraciuPlochu(POLICKO p_hraciaPlocha[11][11]) {
+void nastavHraciuPlochu(POLICKO** p_hraciaPlocha) {
     /* VERTIKALNE */
     for (int i = 1; i <= 3; ++i) {
         for (int j = 4; j <= 6; ++j) {
@@ -392,7 +384,7 @@ void nastavHraciuPlochu(POLICKO p_hraciaPlocha[11][11]) {
     nastavObsahPolicka(&p_hraciaPlocha[6][5], DomovKoniecHore);
 }
 
-void vykresliHraciuPlochu(POLICKO p_hraciaPlocha[11][11]) {
+void vykresliHraciuPlochu(POLICKO** p_hraciaPlocha) {
     char* vypis = NULL;
 
     for (int riadok = 0; riadok < 11; ++riadok) {
@@ -965,7 +957,7 @@ void priradCestuFigurke(FIGURKA* figurka, FARBA_HRACA farba) {
     }
 }
 
-void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO hraciaPlocha[11][11]) {
+void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO** hraciaPlocha) {
     POLICKO* cielovePolicko = &hraciaPlocha[figurka->poziciaRiadok][figurka->poziciaStlpec];
     FIGURKA* vyhadzovanaFigurka = NULL;
     if (cielovePolicko->jeNaMneHrac == 1) {
@@ -1169,7 +1161,12 @@ int hra(int argc, char* argv[]) {
      *      - na poziciu hraciaPlocha[5][6] DomovKoniecVlavo
      *      - na poziciu hraciaPlocha[6][5] DomovKoniecHore
      * */
-    POLICKO hraciaPlocha[11][11];
+
+    POLICKO* hraciaPlocha[11];
+    for (int i = 0; i < 11; ++i) {
+        hraciaPlocha[i] = (POLICKO*)malloc(11 * sizeof(POLICKO));
+    }
+
     for (int i = 0; i < 11; ++i) {
         for (int j = 0; j < 11; ++j) {
             for (int k = 0; k < 3; ++k) {
@@ -1398,5 +1395,8 @@ int hra(int argc, char* argv[]) {
         free(hraci[i].figurkyHraca);
     }
     free(hraci);
+    for (int i = 0; i < 11; ++i) {
+        free(hraciaPlocha[i]);
+    }
     return 0;
 }

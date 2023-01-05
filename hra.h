@@ -1,5 +1,5 @@
-#ifndef CLOVECENEHNEVAJSA_SERVER_H
-#define CLOVECENEHNEVAJSA_SERVER_H
+#ifndef CLOVECENEHNEVAJSA_HRA_H
+#define CLOVECENEHNEVAJSA_HRA_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,11 +10,53 @@
 #include "client.h"
 #include "server.h"
 
-typedef struct figurka FIGURKA;
-typedef enum farbaHraca FARBA_HRACA;
-typedef struct hrac HRAC;
-typedef enum typyPolicok TYP_POLICKA;
-typedef struct policko POLICKO;
+typedef struct figurka {
+    int figurkaID;
+    int poziciaRiadok;
+    int poziciaStlpec;
+    int cestaFigurky[44][2];
+    int pocetPrejdenychPolicok;
+} FIGURKA;
+typedef enum farbaHraca {
+    Cervena,
+    Modra,
+    Zelena,
+    Zlta
+} FARBA_HRACA;
+typedef struct hrac {
+    int id;
+    char meno[20];
+    FIGURKA* figurkyHraca;
+    int pocetFiguriek;
+    int pocetFiguriekVCieli;
+    FARBA_HRACA farbaHraca;
+} HRAC;
+typedef enum typyPolicok {
+    Horizontalne,
+    Vertikalne,
+    Prazdne,
+    ZlavaHore,
+    ZdolaDoprava,
+    ZlavaDole,
+    ZhoraDoprava,
+    DomovHore,
+    DomovVpravo,
+    DomovDole,
+    DomovVlavo,
+    DomovKoniecHore,
+    DomovKoniecVpravo,
+    DomovKoniecDole,
+    DomovKoniecVlavo,
+    Neinicializovane
+} TYP_POLICKA;
+typedef struct policko {
+    int jeNaMneHrac;
+    TYP_POLICKA typPolicka;
+    char obsahPolicka[3][3];
+    FIGURKA* figurkaHraca;
+} POLICKO;
+
+int hra(int argc, char* argv[]);
 
 char* dajRiadokPolicka(POLICKO* policko, int riadok);
 
@@ -24,11 +66,11 @@ void nastavObsahPolickaFigurka(POLICKO* policko, FARBA_HRACA p_farba, FIGURKA* p
 
 void vyprazdniPolicko(POLICKO* policko);
 
-void nastavHraciuPlochuPRAZDE(POLICKO** p_hraciaPlocha);
+void nastavHraciuPlochuPRAZDE(POLICKO* p_hraciaPlocha[11]);
 
-void nastavHraciuPlochu(POLICKO** p_hraciaPlocha);
+void nastavHraciuPlochu(POLICKO* p_hraciaPlocha[11]);
 
-void vykresliHraciuPlochu(POLICKO** p_hraciaPlocha);
+void vykresliHraciuPlochu(POLICKO* p_hraciaPlocha[11]);
 
 int dajNahodneCisloVRozsahu(int min, int max);
 
@@ -38,7 +80,7 @@ HRAC* dajHraca(HRAC* zoznamHracov, int pocetHracov,int idHraca);
 
 void priradCestuFigurke(FIGURKA* figurka, FARBA_HRACA farba);
 
-void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO** hraciaPlocha);
+void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPlocha[11]);
 
 char* dajFarbuHraca(HRAC* hrac);
 
@@ -50,6 +92,4 @@ int dajPocetFigurokNaHracejPloche(HRAC* hrac);
 
 int skontrolujStavHraca(HRAC* hrac);
 
-int hra(int argc, char* argv[]);
-
-#endif //CLOVECENEHNEVAJSA_SERVER_H
+#endif

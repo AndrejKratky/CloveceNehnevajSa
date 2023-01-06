@@ -1,12 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-#include "client.h"
 #include "server.h"
-#include "hra.h"
+#include "client.h"
+#include <pthread.h>
+#include <string.h>
+#include <stdio.h>
 
 int main(int argc, char* argv[]) {
-    hra(argc, argv);
-
     char* newArgv[argc-1];
     newArgv[0] = argv[0];
     for (int i = 2; i < argc; i++) {

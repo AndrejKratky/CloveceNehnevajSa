@@ -50,26 +50,29 @@ int client(int argc, char *argv[])
         return 4;
     }
 
-    printf("Please enter a message: ");
-    bzero(buffer,256);
-    fgets(buffer, 255, stdin);
 
-    n = write(sockfd, buffer, strlen(buffer));
-    if (n < 0)
-    {
-        perror("Error writing to socket");
-        return 5;
+
+    while (1) {
+        printf("Please enter a message: ");
+        bzero(buffer, 256);
+        fgets(buffer, 255, stdin);
+
+        n = write(sockfd, buffer, strlen(buffer));
+        if (n < 0) {
+            perror("Error writing to socket");
+            return 5;
+        }
+
+        bzero(buffer, 256);
+        n = read(sockfd, buffer, 255);
+        if (n < 0) {
+            perror("Error reading from socket");
+            return 6;
+        }
+
+        printf("%s\n", buffer);
     }
 
-    bzero(buffer,256);
-    n = read(sockfd, buffer, 255);
-    if (n < 0)
-    {
-        perror("Error reading from socket");
-        return 6;
-    }
-
-    printf("%s\n",buffer);
     close(sockfd);
 
     return 0;

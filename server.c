@@ -5,13 +5,64 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "server.h"
+
+/*void* action(void* connection) {
+    while (1) {
+        STRUKTCONN *connData = (STRUKTCONN *) connection;
+        bzero(connData->buffer, 256);
+        int n = read(connData->newsockfd, connData->buffer, 255);
+        if (n < 0) {
+            perror("Error reading from socket");
+            // return 4;
+        }
+        printf("Here is the message: %s\n", connData->buffer);
+
+        const char *msg = "I got your message";
+        n = write(connData->newsockfd, msg, strlen(msg) + 1);
+        if (n < 0) {
+            perror("Error writing to socket");
+            // return 5;
+        }
+    }
+}*/
+
+void* funServer(void* args) {
+    STRUKTCONN *connData = (STRUKTCONN *) args;
+    int newsockfd = accept(connData->sockfd, (struct sockaddr*)&connData->cli_addr, &connData->cli_len);
+
+    while(1) {
+        if (newsockfd < 0)
+        {
+            perror("ERROR on accept");
+            // return 3;
+        }
+
+        bzero(connData->buffer, 256);
+        int n = read(newsockfd, connData->buffer, 255);
+        if (n < 0) {
+            perror("Error reading from socket");
+            // return 4;
+        }
+        printf("Here is the message: %s\n", connData->buffer);
+
+        const char *msg = "I got your message";
+        n = write(newsockfd, msg, strlen(msg) + 1);
+        if (n < 0) {
+            perror("Error writing to socket");
+            // return 5;
+        }
+    }
+    close(newsockfd);
+    close(connData->sockfd);
+}
+
 
 int server(int argc, char *argv[])
 {
     int sockfd, newsockfd;
     socklen_t cli_len;
     struct sockaddr_in serv_addr, cli_addr;
-    int n;
     char buffer[256];
 
     if (argc < 2)
@@ -41,32 +92,23 @@ int server(int argc, char *argv[])
     listen(sockfd, 5);
     cli_len = sizeof(cli_addr);
 
-    newsockfd = accept(sockfd, (struct sockaddr*)&cli_addr, &cli_len);
-    if (newsockfd < 0)
-    {
-        perror("ERROR on accept");
-        return 3;
-    }
+    pthread_cond_t generuj = PTHREAD_COND_INITIALIZER;
+    pthread_cond_t odober = PTHREAD_COND_INITIALIZER;
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-    bzero(buffer,256);
-    n = read(newsockfd, buffer, 255);
-    if (n < 0)
-    {
-        perror("Error reading from socket");
-        return 4;
-    }
-    printf("Here is the message: %s\n", buffer);
+    STRUKTCONN connection = {buffer, sockfd, cli_len, cli_addr};
 
-    const char* msg = "I got your message";
-    n = write(newsockfd, msg, strlen(msg)+1);
-    if (n < 0)
-    {
-        perror("Error writing to socket");
-        return 5;
-    }
+    pthread_t th1;
+    pthread_t th2;
 
-    close(newsockfd);
-    close(sockfd);
+    pthread_create(&th1, NULL, funServer, &connection);
+    pthread_create(&th2, NULL, funServer, &connection);
+
+    pthread_join(th1, NULL);
+    pthread_join(th2, NULL);
+
+    /*close(newsockfd);
+    close(sockfd);*/
 
     return 0;
 }

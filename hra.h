@@ -25,11 +25,12 @@ typedef enum farbaHraca {
 } FARBA_HRACA;
 typedef struct hrac {
     int id;
-    char meno[20];
+    char meno[256];
     FIGURKA* figurkyHraca;
     int pocetFiguriek;
     int pocetFiguriekVCieli;
     FARBA_HRACA farbaHraca;
+    int newsockfd;
 } HRAC;
 typedef enum typyPolicok {
     Horizontalne,
@@ -57,6 +58,8 @@ typedef struct policko {
 } POLICKO;
 
 int hra(int argc, char* argv[]);
+
+void inicializaciaHracejPlochy(POLICKO* hraciaPlocha[11]);
 
 char* dajRiadokPolicka(POLICKO* policko, int riadok);
 

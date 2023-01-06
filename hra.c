@@ -1,5 +1,24 @@
 #include "hra.h"
 
+void inicializaciaHracejPlochy(POLICKO* hraciaPlocha[11]) {
+    for (int i = 0; i < 11; ++i) {
+        hraciaPlocha[i] = (POLICKO*)malloc(11 * sizeof(POLICKO));
+    }
+
+    for (int i = 0; i < 11; ++i) {
+        for (int j = 0; j < 11; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                for (int m = 0; m < 3; ++m) {
+                    hraciaPlocha[i][j].obsahPolicka[k][m] = '?';
+                }
+            }
+            hraciaPlocha[i][j].typPolicka = Neinicializovane;
+            hraciaPlocha[i][j].jeNaMneHrac = 0;
+            hraciaPlocha[i][j].figurkaHraca = NULL;
+        }
+    }
+}
+
 /**
  * Pri vykreslovani na terminal sa hracia plocha generuje po riadkoch, nie po celych polickach.
  * Preto potrebujeme kazde policko rozdelit trikrat.

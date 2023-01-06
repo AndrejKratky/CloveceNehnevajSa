@@ -1,11 +1,40 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "client.h"
+
+int zapis(char* buffer, int sockfd) {
+    bzero(buffer, 256);
+    fgets(buffer, 255, stdin);
+    int n = write(sockfd, buffer, strlen(buffer));
+    if (n < 0) {
+        perror("Error writing to socket");
+        return 5;
+    }
+    return 0;
+}
+
+int citaj(char* buffer, int sockfd) {
+    bzero(buffer, 256);
+    int n = read(sockfd, buffer, 255);
+    if (n < 0) {
+        perror("Error reading from socket");
+        return 6;
+    }
+
+    char signal = buffer[0];
+    char sprava[255];
+    for (int i = 0; i < 255; ++i) {
+        sprava[i] = buffer[i + 1];
+    }
+    printf("%s\n", sprava);
+
+    if ((int)signal == (int)'r') { // read
+        zapis(buffer, sockfd);
+    } else if ((int)signal == (int)'w') {  // wait
+        return 0;
+    } else {
+        return 0;
+    }
+    return 0;
+}
 
 int client(int argc, char *argv[])
 {
@@ -50,27 +79,8 @@ int client(int argc, char *argv[])
         return 4;
     }
 
-
-
     while (1) {
-        printf("Please enter a message: ");
-        bzero(buffer, 256);
-        fgets(buffer, 255, stdin);
-
-        n = write(sockfd, buffer, strlen(buffer));
-        if (n < 0) {
-            perror("Error writing to socket");
-            return 5;
-        }
-
-        bzero(buffer, 256);
-        n = read(sockfd, buffer, 255);
-        if (n < 0) {
-            perror("Error reading from socket");
-            return 6;
-        }
-
-        printf("%s\n", buffer);
+        citaj(buffer, sockfd);
     }
 
     close(sockfd);

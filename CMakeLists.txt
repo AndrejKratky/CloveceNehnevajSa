@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
 project(CloveceNehnevajSa C)
 set(CMAKE_C_STANDARD 99)
-add_executable(CloveceNehnevajSa main.c client.c client.h server.c server.h hra.c hra.h)
+add_executable(CloveceNehnevajSa main.c client.c client.h server.c server.h hra.c hra.h vypisy.c vypisy.h)
 target_link_libraries(CloveceNehnevajSa pthread)

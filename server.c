@@ -111,6 +111,7 @@ void* funClient(void* args) {
     pthread_mutex_unlock(dataClient->mutex);
 
     vypisHracovi(hrac->meno, newsockfd, "w");
+
     while(1) {
 
     }
@@ -176,8 +177,9 @@ int server(int argc, char *argv[])
         return 2;
     }
 
-    listen(sockfd, 5);
+    listen(sockfd, 4);
     cli_len = sizeof(cli_addr);
+
 
     /*--------------------------------------------------------------------------------------------------------*/
     //pthread_cond_t generuj = PTHREAD_COND_INITIALIZER;

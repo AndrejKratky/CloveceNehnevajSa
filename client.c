@@ -80,7 +80,7 @@ int client(int argc, char *argv[])
     }
 
     while (1) {
-        citaj(buffer, sockfd);
+        bzero(buffer, 256);
     }
 
     close(sockfd);

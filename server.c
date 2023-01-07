@@ -87,14 +87,13 @@ void* funServer(void* args) {
                     citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                     hodKockou = dajNahodneCisloVRozsahu(1,6);
                     printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
-                    /*
+
+                    pthread_mutex_lock(dataServer->mutex);
                     bzero(dataServer->buffer, 256);
-                    char* msg = "Hodil si ";
-                    char cislo = hodKockou;
-                    strcat(msg, (char*)hodKockou);
-                    dataServer->buffer
-                    */
-                    vypisHracovi("Hodil si", hracNaTahu->newsockfd, "w");
+                    sprintf(dataServer->buffer, "Hodil si %d", hodKockou);
+                    vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                    pthread_mutex_unlock(dataServer->mutex);
+
                     cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                     if (hodKockou == 6) {

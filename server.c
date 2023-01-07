@@ -16,26 +16,6 @@ HRAC* getHracSock(int newsockfd, STRUKTURA* dataServer) {
 void* funServer(void* args) {
     STRUKTURA *dataServer = (STRUKTURA *) args;
 
-    switch (dataServer->pocetHracov) {
-        case 2:
-            dataServer->hraci[0].farbaHraca = Cervena;
-            dataServer->hraci[1].farbaHraca = Modra;
-            break;
-        case 3:
-            dataServer->hraci[0].farbaHraca = Cervena;
-            dataServer->hraci[1].farbaHraca = Modra;
-            dataServer->hraci[2].farbaHraca = Zelena;
-            break;
-        case 4:
-            dataServer->hraci[0].farbaHraca = Cervena;
-            dataServer->hraci[1].farbaHraca = Modra;
-            dataServer->hraci[2].farbaHraca = Zelena;
-            dataServer->hraci[3].farbaHraca = Zlta;
-            break;
-        default:
-            break;
-    }
-
     POLICKO* hraciaPlocha[11];
     inicializaciaHracejPlochy(hraciaPlocha);
     nastavHraciuPlochuPRAZDE(hraciaPlocha);
@@ -523,6 +503,26 @@ int server(int argc, char *argv[])
         clientsData[i].pocetFiguriek = 4;
         clientsData[i].pocetFiguriekVCieli = 0;
         clientsData[i].newsockfd = -1;
+
+        switch (pocetHracov) {
+            case 2:
+                data.hraci[0].farbaHraca = Cervena;
+                data.hraci[1].farbaHraca = Modra;
+                break;
+            case 3:
+                data.hraci[0].farbaHraca = Cervena;
+                data.hraci[1].farbaHraca = Modra;
+                data.hraci[2].farbaHraca = Zelena;
+                break;
+            case 4:
+                data.hraci[0].farbaHraca = Cervena;
+                data.hraci[1].farbaHraca = Modra;
+                data.hraci[2].farbaHraca = Zelena;
+                data.hraci[3].farbaHraca = Zlta;
+                break;
+            default:
+                break;
+        }
 
         FIGURKA* figurkyHraca = (FIGURKA*)malloc(4 * sizeof(FIGURKA));
         for (int j = 0; j < 4; ++j) {

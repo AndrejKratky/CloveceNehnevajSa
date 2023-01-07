@@ -20,7 +20,9 @@ typedef struct struktura {
     int pocetHracov;
     int pocetZapisanychHracov;
     struct hrac* hraci;
+    int koniecHry;
     pthread_mutex_t* mutex;
+    pthread_cond_t* condKoniecHry;
 } STRUKTURA;
 
 void cakajNaHraca(char* buffer, int newsockfd);

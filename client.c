@@ -6,9 +6,9 @@ int zapis(char* buffer, int sockfd) {
     int n = write(sockfd, buffer, strlen(buffer));
     if (n < 0) {
         perror("Error writing to socket");
-        return 5;
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 int citaj(char* buffer, int sockfd) {
@@ -16,7 +16,7 @@ int citaj(char* buffer, int sockfd) {
     int n = read(sockfd, buffer, 255);
     if (n < 0) {
         perror("Error reading from socket");
-        return 6;
+        return 0;
     }
 
     char signal = buffer[0];
@@ -27,18 +27,17 @@ int citaj(char* buffer, int sockfd) {
     printf("%s\n", sprava);
 
     if ((int)signal == (int)'r') { // read
-        zapis(buffer, sockfd);
+        return zapis(buffer, sockfd);
     } else if ((int)signal == (int)'w') {  // wait
         int n = write(sockfd, "a", 2);
         if (n < 0) {
             perror("Error writing to socket");
-            return 5;
+            return 0;
         }
-        return 0;
+        return 1;
     } else {
         return 0;
     }
-    return 0;
 }
 
 int client(int argc, char *argv[])
@@ -84,8 +83,9 @@ int client(int argc, char *argv[])
         return 4;
     }
 
-    while (1) {
-        citaj(buffer, sockfd);
+
+    while (citaj(buffer, sockfd)) {
+
     }
 
     close(sockfd);

@@ -99,7 +99,7 @@ void* funServer(void* args) {
                     if (hodKockou == 6) {
                         printf("Hrac %s hodil 6! Presuva figurku na startovacie policko!\n", hracNaTahu->meno);
 
-                        vypisHracovi("Hodil si 6, presuvas figurku na startovacie policko.", hracNaTahu->newsockfd, "w");
+                        vypisHracovi("Presuvas figurku na startovacie policko.", hracNaTahu->newsockfd, "w");
                         cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                         FIGURKA* posuvanaFigurka = NULL;
@@ -124,6 +124,16 @@ void* funServer(void* args) {
                 }
                 break;
             case 3:
+                printf("Na tahu: %s\n", hracNaTahu->meno);
+                printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
+                printf("Hrac %s nema na hracej ploche ziadnu figurku!\n", hracNaTahu->meno);
+                vypisHracovi("Si na tahu.\nNemas na hracej ploche ziadnu figurku.\n", hracNaTahu->newsockfd, "w");
+                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                vypisHracovi("Hadzes kockou...", hracNaTahu->newsockfd, "w");
+                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+
+
+
                 printf("Na tahu: %s\n", hracNaTahu->meno);
                 printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
                 printf("Pre hod stlacte ENTER...\n");

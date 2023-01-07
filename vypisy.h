@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-void vypisHracovi(const char* sprava, int newsockfd, char* signal);
+void vypisHracovi(char* sprava, int newsockfd, char* signal);
 void citajOdHraca(char* buffer, int newsockfd);
 
 #endif

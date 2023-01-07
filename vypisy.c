@@ -1,6 +1,6 @@
 #include "vypisy.h"
 
-void vypisHracovi(const char* sprava, int newsockfd, char* signal) {
+void vypisHracovi(char* sprava, int newsockfd, char* signal) {
     char odoslanaSprava[256];
     odoslanaSprava[0] = *signal;
     strcat(odoslanaSprava, sprava);
@@ -8,6 +8,7 @@ void vypisHracovi(const char* sprava, int newsockfd, char* signal) {
     if (n < 0) {
         perror("Error writing to socket");
     }
+    bzero(odoslanaSprava, 256);
 }
 
 void citajOdHraca(char* buffer, int newsockfd) {

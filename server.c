@@ -97,9 +97,10 @@ void* funClient(void* args) {
 
     for (int i = 0; i < dataClient->pocetHracov; ++i) {
         if (strcmp(buffer, dataClient->hraci[i].meno) == 0) {
-            vypisHracovi("Zadane meno uz existuje...\n", newsockfd, "w");   // w - cakaj
+            //vypisHracovi("Zadane meno uz existuje...\n", newsockfd, "w");   // w - cakaj
+            vypisHracovi("Zadane meno uz existuje...\nZadajte vase meno: ", newsockfd, "r");
             i = 0;
-            vypisHracovi("Zadajte vase meno: ", newsockfd, "r");
+            //vypisHracovi("Zadajte vase meno: ", newsockfd, "r");
             citajOdHraca(buffer, newsockfd);
             strcpy(hrac->meno, buffer);
         }

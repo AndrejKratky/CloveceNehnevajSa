@@ -23,7 +23,7 @@ typedef struct struktura {
     pthread_mutex_t* mutex;
 } STRUKTURA;
 
-void cakajNaHraca(char* buffer, int newsockfd, char* sprava);
+void cakajNaHraca(char* buffer, int newsockfd);
 int server(int argc, char *argv[]);
 void* action(void* connection);
 

@@ -1,10 +1,7 @@
 #include "server.h"
 
-void cakajNaHraca(char* buffer, int newsockfd, char* sprava) {
+void cakajNaHraca(char* buffer, int newsockfd) {
     citajOdHraca(buffer, newsockfd);
-    if ((int)buffer[0] == (int)'a') {
-        vypisHracovi(sprava, newsockfd, "r");
-    }
 }
 
 HRAC* getHracSock(int newsockfd, STRUKTURA* dataServer) {
@@ -81,13 +78,12 @@ void* funServer(void* args) {
                 printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
                 printf("Hrac %s nema na hracej ploche ziadnu figurku!\n", hracNaTahu->meno);
                 vypisHracovi("Si na tahu.\nNemas na hracej ploche ziadnu figurku.\n", hracNaTahu->newsockfd, "w");
-                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd, "Hadzes kockou...");
-                citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
-
+                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                vypisHracovi("Hadzes kockou...", hracNaTahu->newsockfd, "w");
+                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                 for (int i = 0; i < 3; i++) {
-                    vypisHracovi("Pre hod stlac ENTER...", hracNaTahu->newsockfd, "w");
-                    cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd, "");
+                    vypisHracovi("Pre hod stlac ENTER...", hracNaTahu->newsockfd, "r");
                     citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                     hodKockou = dajNahodneCisloVRozsahu(1,6);
                     printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
@@ -97,17 +93,15 @@ void* funServer(void* args) {
                     char cislo = hodKockou;
                     strcat(msg, (char*)hodKockou);
                     dataServer->buffer
-                     */
+                    */
                     vypisHracovi("Hodil si", hracNaTahu->newsockfd, "w");
-                    cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd, "");
-                    citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                    cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                     if (hodKockou == 6) {
                         printf("Hrac %s hodil 6! Presuva figurku na startovacie policko!\n", hracNaTahu->meno);
 
                         vypisHracovi("Hodil si 6, presuvas figurku na startovacie policko.", hracNaTahu->newsockfd, "w");
-                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd, "");
-                        citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                         FIGURKA* posuvanaFigurka = NULL;
                         for (int j = 1; j <= hracNaTahu->pocetFiguriek; j++) {
@@ -333,7 +327,8 @@ void* funClient(void* args) {
         if (strcmp(buffer, dataClient->hraci[i].meno) == 0) {
             i = 0;
             vypisHracovi("Zadane meno uz existuje...", newsockfd, "w");   // w - cakaj
-            cakajNaHraca(buffer, newsockfd, "Zadajte vase meno: ");
+            cakajNaHraca(buffer, newsockfd);
+            vypisHracovi("Zadajte vase meno: ", newsockfd, "r");
             citajOdHraca(buffer, newsockfd);
             for (int j = 0; j < 256; j++) {
                 if (buffer[j] == '\n') {

@@ -29,6 +29,11 @@ int citaj(char* buffer, int sockfd) {
     if ((int)signal == (int)'r') { // read
         zapis(buffer, sockfd);
     } else if ((int)signal == (int)'w') {  // wait
+        int n = write(sockfd, "a", 2);
+        if (n < 0) {
+            perror("Error writing to socket");
+            return 5;
+        }
         return 0;
     } else {
         return 0;
@@ -80,7 +85,7 @@ int client(int argc, char *argv[])
     }
 
     while (1) {
-        bzero(buffer, 256);
+        citaj(buffer, sockfd);
     }
 
     close(sockfd);

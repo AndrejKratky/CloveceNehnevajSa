@@ -94,7 +94,6 @@ void* funServer(void* args) {
                     bzero(dataServer->buffer, 256);
                     sprintf(dataServer->buffer, "Hodil si %d", hodKockou);
                     vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
-
                     cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                     if (hodKockou == 6) {
@@ -128,12 +127,16 @@ void* funServer(void* args) {
                 printf("Na tahu: %s\n", hracNaTahu->meno);
                 printf("Farba hraca: %s\n", dajFarbuHraca(hracNaTahu));
                 printf("Hrac vykonava tah...\n");
-                vypisHracovi("Si na tahu.", hracNaTahu->newsockfd, "w");
-                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                vypisHracovi("Pre hod stlac ENTER...", hracNaTahu->newsockfd, "r");
+                vypisHracovi("Si na tahu.\nPre hod stlac ENTER...", hracNaTahu->newsockfd, "r");
                 citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
+
                 hodKockou = dajNahodneCisloVRozsahu(1,6);
                 printf("Hrac %s hadze kockou: %d\n", hracNaTahu->meno, hodKockou);
+
+                bzero(dataServer->buffer, 256);
+                sprintf(dataServer->buffer, "Hodil si %d", hodKockou);
+                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                 hracHodil6 = 0;
                 celkovySucetPriHode6 = 0;
@@ -144,36 +147,35 @@ void* funServer(void* args) {
                 pocetFigurokNaHracejPloche = dajPocetFigurokNaHracejPloche(hracNaTahu);
                 if (pocetFigurokNaHracejPloche > 1) {
                     if (hracHodil6 == 1) {
-                        vypisHracovi("Hodil si 6! Mozes si vybrat medzi posunutim a pridanim dalsej figurky na hraciu plochu.", hracNaTahu->newsockfd, "w");
-                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                        vypisHracovi("1. posunutie figurky\n2. pridanie figurky", hracNaTahu->newsockfd, "w");
-                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                        vypisHracovi("ZADAJ VOLBU: ", hracNaTahu->newsockfd, "w");
+                        vypisHracovi("Mozes si vybrat medzi posunutim a pridanim dalsej figurky na hraciu plochu.\n1. posunutie figurky\n2. pridanie figurky\nZADAJ VOLBU:", hracNaTahu->newsockfd, "r");
                         citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
-                        inputHryCislo = (int)dataServer->buffer[0];
+                        inputHryCislo = atoi(&dataServer->buffer[0]);
+                        printf("input od hraca: %d", inputHryCislo);
+
                         while (inputHryCislo <= 0 || inputHryCislo >= 3) {
-                            vypisHracovi("ZADAJTE CISLO OD 1 DO 2.", hracNaTahu->newsockfd, "w");
-                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
+                            vypisHracovi("ZADAJTE CISLO OD 1 DO 2.\nOpatovny pokus o zadanie:", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            inputHryCislo = (int)dataServer->buffer[0];
+                            inputHryCislo = atoi(&dataServer->buffer[0]);
                         }
 
                         if (inputHryCislo == 1) {
                             celkovySucetPriHode6 = hodKockou;
-                            vypisHracovi("Hodil si 6! Hadzes este raz!", hracNaTahu->newsockfd, "w");
-                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            vypisHracovi("Pre hod stlac ENTER...", hracNaTahu->newsockfd, "r");
+                            vypisHracovi("Hodil si 6! Hadzes este raz!\nPre hod stlac ENTER...", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                             hodKockou = dajNahodneCisloVRozsahu(1,6);
-                            celkovySucetPriHode6 += hodKockou;
-                            vypisHracovi("Na hracej ploche mas viacero figurok,", hracNaTahu->newsockfd, "w");
+
+                            bzero(dataServer->buffer, 256);
+                            sprintf(dataServer->buffer, "Hodil si %d", hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            vypisHracovi("zvol si jednu.", hracNaTahu->newsockfd, "w");
+
+                            celkovySucetPriHode6 += hodKockou;
+                            vypisHracovi("Na hracej ploche mas viacero figurok:", hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                             for (int i = 0; i < hracNaTahu->pocetFiguriek; ++i) {
+                                bzero(dataServer->buffer, 256);
                                 sprintf(dataServer->buffer, "Figurka s ID %d sa nachadza na %d policku od startu.", hracNaTahu->figurkyHraca[i].figurkaID, hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok);
                                 vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                                 cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -181,15 +183,15 @@ void* funServer(void* args) {
 
                             vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            inputHryCislo = (int)dataServer->buffer[0];
+                            inputHryCislo = atoi(&dataServer->buffer[0]);
                             while (inputHryCislo <= 0 || inputHryCislo >= 5) {
                                 vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
                                 citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                                inputHryCislo = (int)dataServer->buffer[0];
+                                inputHryCislo = atoi(&dataServer->buffer[0]);
                                 if (jeNaHracejPloche(hracNaTahu, inputHryCislo) == 1) {
                                     break;
                                 } else {
-                                    // bzero(dataServer->buffer, 256);
+                                    bzero(dataServer->buffer, 256);
                                     sprintf(dataServer->buffer, "Figurka s ID %d sa nenachadza na hracej ploche!", inputHryCislo);
                                     vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                                     cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -227,6 +229,7 @@ void* funServer(void* args) {
                         }
                     } else {
                         for (int i = 0; i < hracNaTahu->pocetFiguriek; ++i) {
+                            bzero(dataServer->buffer, 256);
                             sprintf(dataServer->buffer, "Figurka s ID %d sa nachadza na %d policku od startu.", hracNaTahu->figurkyHraca[i].figurkaID, hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok);
                             vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -234,15 +237,15 @@ void* funServer(void* args) {
 
                         vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
                         citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                        inputHryCislo = (int)dataServer->buffer[0];
+                        inputHryCislo = atoi(&dataServer->buffer[0]);
                         while (inputHryCislo <= 0 || inputHryCislo >= 5) {
                             vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            inputHryCislo = (int)dataServer->buffer[0];
+                            inputHryCislo = atoi(&dataServer->buffer[0]);
                             if (jeNaHracejPloche(hracNaTahu, inputHryCislo) == 1) {
                                 break;
                             } else {
-                                // bzero(dataServer->buffer, 256);
+                                bzero(dataServer->buffer, 256);
                                 sprintf(dataServer->buffer, "Figurka s ID %d sa nenachadza na hracej ploche!", inputHryCislo);
                                 vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                                 cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -264,33 +267,58 @@ void* funServer(void* args) {
                     }
                 } else {
                     if (hracHodil6 == 1) {
-                        vypisHracovi("Hodil si 6! Mozes si vybrat medzi posunutim a pridanim dalsej figurky na hraciu plochu.", hracNaTahu->newsockfd, "w");
-                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                        vypisHracovi("1. posunutie figurky\n2. pridanie figurky", hracNaTahu->newsockfd, "w");
-                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                        vypisHracovi("ZADAJ VOLBU: ", hracNaTahu->newsockfd, "w");
+                        vypisHracovi("Mozes si vybrat medzi posunutim a pridanim dalsej figurky na hraciu plochu.\n1. posunutie figurky\n2. pridanie figurky\nZADAJ VOLBU:", hracNaTahu->newsockfd, "r");
                         citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
-                        inputHryCislo = (int)dataServer->buffer[0];
+                        inputHryCislo = atoi(&dataServer->buffer[0]);
+                        printf("input od hraca: %d", inputHryCislo);
+
+
                         while (inputHryCislo <= 0 || inputHryCislo >= 3) {
-                            vypisHracovi("ZADAJTE CISLO OD 1 DO 2.", hracNaTahu->newsockfd, "w");
-                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
+                            vypisHracovi("ZADAJTE CISLO OD 1 DO 2.\nOpatovny pokus o zadanie:", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            inputHryCislo = (int)dataServer->buffer[0];
+                            inputHryCislo = atoi(&dataServer->buffer[0]);
                         }
                         if (inputHryCislo == 1) {
                             celkovySucetPriHode6 = hodKockou;
-                            vypisHracovi("Hodil si 6! Hadzes este raz!", hracNaTahu->newsockfd, "w");
-                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            vypisHracovi("Pre hod stlac ENTER...", hracNaTahu->newsockfd, "r");
+                            vypisHracovi("Hodil si 6! Hadzes este raz!\nPre hod stlac ENTER...", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                             hodKockou = dajNahodneCisloVRozsahu(1,6);
+
+                            bzero(dataServer->buffer, 256);
+                            sprintf(dataServer->buffer, "Hodil si %d", hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+
                             celkovySucetPriHode6 += hodKockou;
-                            vypisHracovi("Na hracej ploche mas viacero figurok,", hracNaTahu->newsockfd, "w");
+                            vypisHracovi("Na hracej ploche mas viacero figurok:", hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
-                            vypisHracovi("zvol si jednu.", hracNaTahu->newsockfd, "w");
-                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+
+                            for (int i = 0; i < hracNaTahu->pocetFiguriek; ++i) {
+                                bzero(dataServer->buffer, 256);
+                                sprintf(dataServer->buffer, "Figurka s ID %d sa nachadza na %d policku od startu.", hracNaTahu->figurkyHraca[i].figurkaID, hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            }
+
+                            vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
+                            citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            inputHryCislo = atoi(&dataServer->buffer[0]);
+                            while (inputHryCislo <= 0 || inputHryCislo >= 5) {
+                                vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
+                                citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                                inputHryCislo = atoi(&dataServer->buffer[0]);
+                                if (jeNaHracejPloche(hracNaTahu, inputHryCislo) == 1) {
+                                    break;
+                                } else {
+                                    bzero(dataServer->buffer, 256);
+                                    sprintf(dataServer->buffer, "Figurka s ID %d sa nenachadza na hracej ploche!", inputHryCislo);
+                                    vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                    cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                                    inputHryCislo = 0;
+                                }
+                            }
+
                             FIGURKA* posuvanaFigurka = NULL;
                             for (int i = 0; i < hracNaTahu->pocetFiguriek; i++) {
                                 if (hracNaTahu->figurkyHraca[i].figurkaID == inputHryCislo) {
@@ -298,6 +326,9 @@ void* funServer(void* args) {
                                     break;
                                 }
                             }
+
+
+
                             vyprazdniPolicko(&hraciaPlocha[posuvanaFigurka->poziciaRiadok][posuvanaFigurka->poziciaStlpec]);
                             presunFigurku(posuvanaFigurka, celkovySucetPriHode6, posuvanaFigurka->figurkaID, hraciaPlocha);
                             poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;

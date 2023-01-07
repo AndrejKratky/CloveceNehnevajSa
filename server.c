@@ -108,17 +108,14 @@ void* funClient(void* args) {
     pthread_mutex_lock(dataClient->mutex);
     dataClient->pocetZapisanychHracov++;
     pthread_mutex_unlock(dataClient->mutex);
-    /*for (int i = 0; i < dataClient->pocetHracov; ++i) {
-        if (strcmp("\0", zapisaniHraci[i]) == 0) {
-            strcpy(zapisaniHraci[i], hrac->meno);
-            break;
-        }
-    }*/
 
     vypisHracovi(hrac->meno, newsockfd, "w");
+    while(1) {
+
+    }
 
     /* HRA */
-    /*while(1) {
+    while(1) {
         bzero(dataClient->buffer, 256);
         int n = read(newsockfd, dataClient->buffer, 255);
         if (n < 0) {
@@ -133,7 +130,7 @@ void* funClient(void* args) {
             perror("Error writing to socket");
             return NULL;
         }
-    }*/
+    }
     close(newsockfd);
     close(dataClient->sockfd);
 }

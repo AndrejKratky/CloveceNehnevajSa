@@ -51,13 +51,15 @@ void* funServer(void* args) {
         vycistiKonzolu();
         vykresliHraciuPlochu(hraciaPlocha);
         hracNaTahu = dajHraca(dataServer->hraci, dataServer->pocetHracov, naTahuID);
-
-        switch (skontrolujStavHraca(hracNaTahu)) {
+        //skontrolujStavHraca(hracNaTahu)
+        switch (1) {
             case 1:
                 koniecHry = 1;
                 pthread_mutex_lock(dataServer->mutex);
                 dataServer->koniecHry = 1;
-                pthread_cond_signal(dataServer->condKoniecHry);
+                for (int i = 0; i < dataServer->pocetHracov; ++i) {
+                    pthread_cond_signal(dataServer->condKoniecHry);
+                }
                 pthread_mutex_unlock(dataServer->mutex);
                 break;
 
@@ -454,6 +456,8 @@ void* funServer(void* args) {
         }
     }
 
+
+
     printf("KONIEC HRY!\n");
     printf("Zvitazil hrac: %s\n", hracNaTahu->meno);
 
@@ -587,8 +591,7 @@ int server(int argc, char *argv[])
     pthread_t serverThread;
     pthread_t clientThreads[pocetHracov];
 
-    HRAC* clientsData = (HRAC*)malloc(pocetHracov * sizeof(HRAC));  // NOT FREED
-
+    HRAC* clientsData = (HRAC*)malloc(pocetHracov * sizeof(HRAC));
     STRUKTURA data = {buffer, sockfd, cli_len, cli_addr, pocetHracov, 0,clientsData, 0,&mutex, &zaciatokHry, &condKoniecHry};
 
     switch (pocetHracov) {
@@ -617,7 +620,7 @@ int server(int argc, char *argv[])
         clientsData[i].id = i + 1;
         clientsData[i].pocetFiguriek = 4;
         clientsData[i].newsockfd = -1;
-
+        clientsData[i].meno[0] = '\0';
         FIGURKA* figurkyHraca = (FIGURKA*)malloc(4 * sizeof(FIGURKA));
         for (int j = 0; j < 4; ++j) {
             figurkyHraca[j].poziciaRiadok = -1;
@@ -658,7 +661,7 @@ int server(int argc, char *argv[])
     pthread_cond_destroy(&zaciatokHry);
 
     for (int i = 0; i < pocetHracov; ++i) {
-        free(clientsData->figurkyHraca);
+        free(clientsData[i].figurkyHraca);
     }
     free(clientsData);
 

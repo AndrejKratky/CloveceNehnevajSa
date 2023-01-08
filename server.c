@@ -152,9 +152,11 @@ void* funServer(void* args) {
 
                             for (int i = 0; i < hracNaTahu->pocetFiguriek; ++i) {
                                 bzero(dataServer->buffer, 256);
-                                sprintf(dataServer->buffer, "Figurka s ID %d sa nachadza na %d policku od startu.", hracNaTahu->figurkyHraca[i].figurkaID, hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok);
-                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
-                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                                if ( hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok > -1) {
+                                    sprintf(dataServer->buffer, "Figurka s ID %d sa nachadza na %d. policku od startu.", hracNaTahu->figurkyHraca[i].figurkaID, hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok);
+                                    vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                    cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                                }
                             }
 
                             vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
@@ -207,6 +209,9 @@ void* funServer(void* args) {
                                 vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                                 cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
                             } else {
+                                poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                                poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                                nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
                                 sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", celkovySucetPriHode6);
                                 vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                                 cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -231,9 +236,11 @@ void* funServer(void* args) {
                     } else {
                         for (int i = 0; i < hracNaTahu->pocetFiguriek; ++i) {
                             bzero(dataServer->buffer, 256);
-                            sprintf(dataServer->buffer, "Figurka s ID %d sa nachadza na %d policku od startu.", hracNaTahu->figurkyHraca[i].figurkaID, hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok);
-                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
-                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            if ( hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok > -1) {
+                                sprintf(dataServer->buffer, "Figurka s ID %d sa nachadza na %d. policku od startu.", hracNaTahu->figurkyHraca[i].figurkaID, hracNaTahu->figurkyHraca[i].pocetPrejdenychPolicok);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            }
                         }
                         vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
                         citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -285,6 +292,9 @@ void* funServer(void* args) {
                             vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
                         } else {
+                            poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                            poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                            nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
                             sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", hodKockou);
                             vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -356,6 +366,9 @@ void* funServer(void* args) {
                                 vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                                 cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
                             } else {
+                                poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                                poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                                nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
                                 sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", celkovySucetPriHode6);
                                 vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                                 cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
@@ -423,6 +436,9 @@ void* funServer(void* args) {
                             vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
                         } else {
+                            poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                            poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                            nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
                             sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", hodKockou);
                             vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);

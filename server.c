@@ -14,7 +14,7 @@ HRAC* getHracSock(int newsockfd, STRUKTURA* dataServer) {
 }
 
 void* funServer(void* args) {
-    srand(time(NULL));
+    //srand(time(NULL));
 
     STRUKTURA *dataServer = (STRUKTURA *) args;
 
@@ -341,7 +341,7 @@ void* funServer(void* args) {
 
                             FIGURKA* posuvanaFigurka = NULL;
                             for (int i = 1; i <= hracNaTahu->pocetFiguriek; i++) {
-                                if (jeNaHracejPloche(hracNaTahu, i) == 0) {
+                                if (jeNaHracejPloche(hracNaTahu, i) == 1) {
                                     posuvanaFigurka = &(hracNaTahu->figurkyHraca[i - 1]);
                                     break;
                                 }

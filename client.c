@@ -30,7 +30,7 @@ int citaj(char* buffer, int sockfd) {
     if ((int)signal == (int)'r') { // read
         return zapis(buffer, sockfd);
     } else if ((int)signal == (int)'w') {  // wait
-        int n = write(sockfd, "a", 2);
+        n = write(sockfd, "a", 2);
         if (n < 0) {
             perror("Error writing to socket");
             return 0;
@@ -43,7 +43,7 @@ int citaj(char* buffer, int sockfd) {
 
 int client(int argc, char *argv[])
 {
-    int sockfd, n;
+    int sockfd;
     struct sockaddr_in serv_addr;
     struct hostent* server;
 

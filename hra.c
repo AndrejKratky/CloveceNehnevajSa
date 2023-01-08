@@ -12,7 +12,6 @@ void inicializaciaHracejPlochy(POLICKO* hraciaPlocha[11]) {
                     hraciaPlocha[i][j].obsahPolicka[k][m] = '?';
                 }
             }
-            hraciaPlocha[i][j].typPolicka = Neinicializovane;
             hraciaPlocha[i][j].jeNaMneHrac = 0;
             hraciaPlocha[i][j].figurkaHraca = NULL;
         }
@@ -47,7 +46,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         for (int i = 0; i < 3; ++i) {
             policko->obsahPolicka[1][i] = ' ';
         }
-        policko->typPolicka = Horizontalne;
 
     } else if (p_typPolicka == Vertikalne) {
         for (int i = 0; i < 3; ++i) {
@@ -57,7 +55,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         for (int i = 0; i < 3; ++i) {
             policko->obsahPolicka[i][1] = ' ';
         }
-        policko->typPolicka = Vertikalne;
 
     } else if (p_typPolicka == Prazdne) {
         for (int i = 0; i < 3; ++i) {
@@ -65,7 +62,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
                 policko->obsahPolicka[i][j] = 'X';
             }
         }
-        policko->typPolicka = Prazdne;
 
     } else if (p_typPolicka == ZlavaHore) {
         policko->obsahPolicka[0][0] = '/';
@@ -79,7 +75,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '-';
         policko->obsahPolicka[2][1] = '-';
         policko->obsahPolicka[2][2] = '/';
-        policko->typPolicka = Prazdne;
 
     } else if (p_typPolicka == ZdolaDoprava) {
         policko->obsahPolicka[0][0] = '/';
@@ -93,7 +88,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
         policko->obsahPolicka[2][2] = '/';
-        policko->typPolicka = ZdolaDoprava;
 
     } else if (p_typPolicka == ZlavaDole) {
         policko->obsahPolicka[0][0] = '-';
@@ -107,7 +101,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '\\';
         policko->obsahPolicka[2][1] = ' ';
         policko->obsahPolicka[2][2] = '|';
-        policko->typPolicka = ZlavaDole;
 
     } else if (p_typPolicka == ZhoraDoprava) {
         policko->obsahPolicka[0][0] = '|';
@@ -121,7 +114,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '\\';
         policko->obsahPolicka[2][1] = '-';
         policko->obsahPolicka[2][2] = '-';
-        policko->typPolicka = ZhoraDoprava;
 
     } else if (p_typPolicka == DomovHore) {
         policko->obsahPolicka[0][0] = '_';
@@ -135,7 +127,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '-';
         policko->obsahPolicka[2][1] = '-';
         policko->obsahPolicka[2][2] = '-';
-        policko->typPolicka = DomovHore;
 
     } else if (p_typPolicka == DomovVpravo) {
         policko->obsahPolicka[0][0] = '|';
@@ -149,7 +140,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
         policko->obsahPolicka[2][2] = '|';
-        policko->typPolicka = DomovVpravo;
 
     } else if (p_typPolicka == DomovDole) {
         policko->obsahPolicka[0][0] = '-';
@@ -163,7 +153,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '-';
         policko->obsahPolicka[2][1] = '-';
         policko->obsahPolicka[2][2] = '-';
-        policko->typPolicka = DomovDole;
 
     } else if (p_typPolicka == DomovVlavo) {
         policko->obsahPolicka[0][0] = '|';
@@ -177,7 +166,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
         policko->obsahPolicka[2][2] = '|';
-        policko->typPolicka = DomovVlavo;
 
     } else if (p_typPolicka == DomovKoniecHore) {
         policko->obsahPolicka[0][0] = '|';
@@ -191,7 +179,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = ' ';
         policko->obsahPolicka[2][2] = '|';
-        policko->typPolicka = DomovKoniecHore;
 
     } else if (p_typPolicka == DomovKoniecVpravo) {
         policko->obsahPolicka[0][0] = '-';
@@ -205,7 +192,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '-';
         policko->obsahPolicka[2][1] = '-';
         policko->obsahPolicka[2][2] = '-';
-        policko->typPolicka = DomovKoniecVpravo;
 
     } else if (p_typPolicka == DomovKoniecDole) {
         policko->obsahPolicka[0][0] = '|';
@@ -219,7 +205,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '|';
         policko->obsahPolicka[2][1] = '-';
         policko->obsahPolicka[2][2] = '|';
-        policko->typPolicka = DomovKoniecDole;
 
     } else if (p_typPolicka == DomovKoniecVlavo) {
         policko->obsahPolicka[0][0] = '-';
@@ -233,7 +218,6 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
         policko->obsahPolicka[2][0] = '-';
         policko->obsahPolicka[2][1] = '-';
         policko->obsahPolicka[2][2] = '-';
-        policko->typPolicka = DomovKoniecVlavo;
 
     } else {
         return;
@@ -999,9 +983,16 @@ int dajPocetFigurokNaHracejPloche(HRAC* hrac) {
 }
 
 int skontrolujStavHraca(HRAC* hrac) {
-    if(hrac->pocetFiguriekVCieli == 4) {
+    int pocitadloVCieli = 0;
+    for (int i = 0; i < hrac->pocetFiguriek; ++i) {
+        if (hrac->figurkyHraca[i].pocetPrejdenychPolicok > 39) {
+            pocitadloVCieli++;
+        }
+    }
+    if (pocitadloVCieli == hrac->pocetFiguriek) {
         return 1;   // hrac vyhral
     }
+
     if (dajPocetFigurokNaHracejPloche(hrac) == 0) {
         return 2;   // hrac nema ziadnu figurku na hracej ploche
     }

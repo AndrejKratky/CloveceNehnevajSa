@@ -28,7 +28,6 @@ typedef struct hrac {
     char meno[256];
     FIGURKA* figurkyHraca;
     int pocetFiguriek;
-    int pocetFiguriekVCieli;
     FARBA_HRACA farbaHraca;
     int newsockfd;
 } HRAC;
@@ -52,12 +51,9 @@ typedef enum typyPolicok {
 } TYP_POLICKA;
 typedef struct policko {
     int jeNaMneHrac;
-    TYP_POLICKA typPolicka;
     char obsahPolicka[3][3];
     FIGURKA* figurkaHraca;
 } POLICKO;
-
-int hra(int argc, char* argv[]);
 
 void inicializaciaHracejPlochy(POLICKO* hraciaPlocha[11]);
 
@@ -88,8 +84,6 @@ int presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPl
 char* dajFarbuHraca(HRAC* hrac);
 
 int jeNaHracejPloche(HRAC* hrac, int idFigurky);
-
-void vstupIDFigurka(int* inputCislo, HRAC* hrac);
 
 int dajPocetFigurokNaHracejPloche(HRAC* hrac);
 

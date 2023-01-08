@@ -51,8 +51,7 @@ void* funServer(void* args) {
         vycistiKonzolu();
         vykresliHraciuPlochu(hraciaPlocha);
         hracNaTahu = dajHraca(dataServer->hraci, dataServer->pocetHracov, naTahuID);
-        //skontrolujStavHraca(hracNaTahu)
-        switch (1) {
+        switch (skontrolujStavHraca(hracNaTahu)) {
             case 1:
                 koniecHry = 1;
                 pthread_mutex_lock(dataServer->mutex);

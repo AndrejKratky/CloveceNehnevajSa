@@ -54,11 +54,11 @@ void* funServer(void* args) {
 
         switch (skontrolujStavHraca(hracNaTahu)) {
             case 1:
+                koniecHry = 1;
                 pthread_mutex_lock(dataServer->mutex);
                 dataServer->koniecHry = 1;
                 pthread_cond_signal(dataServer->condKoniecHry);
                 pthread_mutex_unlock(dataServer->mutex);
-                koniecHry = 1;
                 break;
 
             case 2:
@@ -519,8 +519,6 @@ void* funClient(void* args) {
         pthread_cond_signal(dataClient->zaciatokHry);
     }
     pthread_mutex_unlock(dataClient->mutex);
-
-    vypisHracovi(hrac->meno, newsockfd, "w");
 
     pthread_mutex_lock(dataClient->mutex);
     while(dataClient->koniecHry == 0) {

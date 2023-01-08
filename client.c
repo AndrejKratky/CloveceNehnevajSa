@@ -84,11 +84,7 @@ int client(int argc, char *argv[])
         return 4;
     }
 
-
-
-    while (citaj(buffer, sockfd)) {
-
-    }
+    while (citaj(buffer, sockfd));
 
     close(sockfd);
 

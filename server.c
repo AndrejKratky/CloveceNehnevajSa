@@ -14,7 +14,7 @@ HRAC* getHracSock(int newsockfd, STRUKTURA* dataServer) {
 }
 
 void* funServer(void* args) {
-    //srand(time(NULL));
+    srand(time(NULL));
 
     STRUKTURA *dataServer = (STRUKTURA *) args;
 
@@ -512,6 +512,9 @@ void* funClient(void* args) {
     }
 
     strcpy(hrac->meno, buffer);
+
+    vypisHracovi("Meno je OK", newsockfd, "w");
+    cakajNaHraca(buffer, newsockfd);
 
     pthread_mutex_lock(dataClient->mutex);
     dataClient->pocetZapisanychHracov++;

@@ -28,6 +28,5 @@ typedef struct struktura {
 
 void cakajNaHraca(char* buffer, int newsockfd);
 int server(int argc, char *argv[]);
-void* action(void* connection);
 
 #endif

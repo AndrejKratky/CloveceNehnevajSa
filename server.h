@@ -22,6 +22,7 @@ typedef struct struktura {
     struct hrac* hraci;
     int koniecHry;
     pthread_mutex_t* mutex;
+    pthread_cond_t* zaciatokHry;
     pthread_cond_t* condKoniecHry;
 } STRUKTURA;
 

@@ -22,8 +22,11 @@ void* funServer(void* args) {
     nastavHraciuPlochu(hraciaPlocha);
 
     printf("Cakam kym sa pripoja vsetci hraci...\n");
+    pthread_mutex_lock(dataServer->mutex);
     while(dataServer->pocetZapisanychHracov != dataServer->pocetHracov) {
+        pthread_cond_wait(dataServer->zaciatokHry, dataServer->mutex);
     }
+    pthread_mutex_unlock(dataServer->mutex);
 
     int nahodnyHracID = dajNahodneCisloVRozsahu(1, dataServer->pocetHracov);
     HRAC* hracNaTahu = dajHraca(dataServer->hraci, dataServer->pocetHracov, nahodnyHracID);
@@ -98,6 +101,9 @@ void* funServer(void* args) {
                     }
                 }
 
+                vypisHracovi("Koniec tahu.", hracNaTahu->newsockfd, "w");
+                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+
                 naTahuID++;
                 if (naTahuID > dataServer->pocetHracov) {
                     naTahuID = 1;
@@ -164,7 +170,8 @@ void* funServer(void* args) {
                             vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                             inputHryCislo = atoi(&dataServer->buffer[0]);
-                            while (inputHryCislo <= 0 || inputHryCislo >= 5) {
+
+                            while (inputHryCislo <= 0 || inputHryCislo >= 5 || jeNaHracejPloche(hracNaTahu, inputHryCislo) != 1) {
                                 vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
                                 citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                                 inputHryCislo = atoi(&dataServer->buffer[0]);
@@ -191,6 +198,12 @@ void* funServer(void* args) {
                             poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
                             poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
                             nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                            sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+
+
                         } else {
                             printf("Hrac %s hodil 6! Presuva figurku na startovacie policko!\n", hracNaTahu->meno);
                             vypisHracovi("Presuvas figurku na startovacie policko!", hracNaTahu->newsockfd, "w");
@@ -218,7 +231,7 @@ void* funServer(void* args) {
                         vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
                         citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                         inputHryCislo = atoi(&dataServer->buffer[0]);
-                        while (inputHryCislo <= 0 || inputHryCislo >= 5) {
+                        while (inputHryCislo <= 0 || inputHryCislo >= 5 || jeNaHracejPloche(hracNaTahu, inputHryCislo) != 1) {
                             vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                             inputHryCislo = atoi(&dataServer->buffer[0]);
@@ -244,6 +257,10 @@ void* funServer(void* args) {
                         poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
                         poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
                         nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                        sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, hodKockou);
+                        vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
                     }
                 } else {
                     if (hracHodil6 == 1) {
@@ -284,7 +301,7 @@ void* funServer(void* args) {
                             vypisHracovi("ZADAJTE ID FIGURKY OD 1 DO 4:", hracNaTahu->newsockfd, "r");
                             citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                             inputHryCislo = atoi(&dataServer->buffer[0]);
-                            while (inputHryCislo <= 0 || inputHryCislo >= 5) {
+                            while (inputHryCislo <= 0 || inputHryCislo >= 5 || jeNaHracejPloche(hracNaTahu, inputHryCislo) != 1) {
                                 vypisHracovi("Opatovny pokus o zadanie: ", hracNaTahu->newsockfd, "r");
                                 citajOdHraca(dataServer->buffer, hracNaTahu->newsockfd);
                                 inputHryCislo = atoi(&dataServer->buffer[0]);
@@ -314,6 +331,10 @@ void* funServer(void* args) {
                             poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
                             poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
                             nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                            sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
                         } else {
                             printf("Hrac %s hodil 6! Presuva figurku na startovacie policko!\n", hracNaTahu->meno);
                             vypisHracovi("Presuvas figurku na startovacie policko!", hracNaTahu->newsockfd, "w");
@@ -344,8 +365,15 @@ void* funServer(void* args) {
                         poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
                         poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
                         nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                        sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, hodKockou);
+                        vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                        cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
                     }
                 }
+
+                vypisHracovi("Koniec tahu.", hracNaTahu->newsockfd, "w");
+                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
 
                 naTahuID++;
                 if (naTahuID > dataServer->pocetHracov) {
@@ -418,8 +446,12 @@ void* funClient(void* args) {
     }
 
     strcpy(hrac->meno, buffer);
+
     pthread_mutex_lock(dataClient->mutex);
     dataClient->pocetZapisanychHracov++;
+    if (dataClient->pocetHracov == dataClient->pocetZapisanychHracov) {
+        pthread_cond_signal(dataClient->zaciatokHry);
+    }
     pthread_mutex_unlock(dataClient->mutex);
 
     vypisHracovi(hrac->meno, newsockfd, "w");
@@ -489,6 +521,7 @@ int server(int argc, char *argv[])
     /*--------------------------------------------------------------------------------------------------------*/
     //pthread_cond_t generuj = PTHREAD_COND_INITIALIZER;
     pthread_cond_t condKoniecHry = PTHREAD_COND_INITIALIZER;
+    pthread_cond_t zaciatokHry = PTHREAD_COND_INITIALIZER;
     pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
     pthread_t serverThread;
@@ -496,33 +529,35 @@ int server(int argc, char *argv[])
 
     HRAC* clientsData = (HRAC*)malloc(pocetHracov * sizeof(HRAC));  // NOT FREED
 
-    STRUKTURA data = {buffer, sockfd, cli_len, cli_addr, pocetHracov, 0,clientsData, 0,&mutex, &condKoniecHry};
+    STRUKTURA data = {buffer, sockfd, cli_len, cli_addr, pocetHracov, 0,clientsData, 0,&mutex, &zaciatokHry, &condKoniecHry};
+
+    switch (pocetHracov) {
+        case 2:
+            data.hraci[0].farbaHraca = Cervena;
+            data.hraci[1].farbaHraca = Modra;
+            break;
+        case 3:
+            data.hraci[0].farbaHraca = Cervena;
+            data.hraci[1].farbaHraca = Modra;
+            data.hraci[2].farbaHraca = Zelena;
+            break;
+        case 4:
+            data.hraci[0].farbaHraca = Cervena;
+            data.hraci[1].farbaHraca = Modra;
+            data.hraci[2].farbaHraca = Zelena;
+            data.hraci[3].farbaHraca = Zlta;
+            break;
+        default:
+            break;
+    }
+
     pthread_create(&serverThread, NULL, funServer, &data);
+
     for (int i = 0; i < pocetHracov; i++) {
         clientsData[i].id = i + 1;
         clientsData[i].pocetFiguriek = 4;
         clientsData[i].pocetFiguriekVCieli = 0;
         clientsData[i].newsockfd = -1;
-
-        switch (pocetHracov) {
-            case 2:
-                data.hraci[0].farbaHraca = Cervena;
-                data.hraci[1].farbaHraca = Modra;
-                break;
-            case 3:
-                data.hraci[0].farbaHraca = Cervena;
-                data.hraci[1].farbaHraca = Modra;
-                data.hraci[2].farbaHraca = Zelena;
-                break;
-            case 4:
-                data.hraci[0].farbaHraca = Cervena;
-                data.hraci[1].farbaHraca = Modra;
-                data.hraci[2].farbaHraca = Zelena;
-                data.hraci[3].farbaHraca = Zlta;
-                break;
-            default:
-                break;
-        }
 
         FIGURKA* figurkyHraca = (FIGURKA*)malloc(4 * sizeof(FIGURKA));
         for (int j = 0; j < 4; ++j) {

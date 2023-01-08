@@ -3,6 +3,7 @@
 int zapis(char* buffer, int sockfd) {
     bzero(buffer, 256);
     fgets(buffer, 255, stdin);
+
     int n = write(sockfd, buffer, strlen(buffer));
     if (n < 0) {
         perror("Error writing to socket");
@@ -82,6 +83,7 @@ int client(int argc, char *argv[])
         perror("Error connecting to socket");
         return 4;
     }
+
 
 
     while (citaj(buffer, sockfd)) {

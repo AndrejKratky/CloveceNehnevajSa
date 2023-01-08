@@ -930,22 +930,32 @@ void priradCestuFigurke(FIGURKA* figurka, FARBA_HRACA farba) {
     }
 }
 
-void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPlocha[11]) {
+int presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPlocha[11]) {
     int tempPocetPrejdenychPolicok;
     tempPocetPrejdenychPolicok = figurka->pocetPrejdenychPolicok;
+
+    if (figurka->pocetPrejdenychPolicok + oKolko > 43) {
+        return 3;
+    }
+
     figurka->poziciaRiadok = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][0];
     figurka->poziciaStlpec = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][1];
     figurka->pocetPrejdenychPolicok += oKolko;
 
     POLICKO* cielovePolicko = &hraciaPlocha[figurka->poziciaRiadok][figurka->poziciaStlpec];
+
+
     FIGURKA* vyhadzovanaFigurka = NULL;
     if (cielovePolicko->jeNaMneHrac == 1) {
         vyhadzovanaFigurka = cielovePolicko->figurkaHraca;
         vyhadzovanaFigurka->pocetPrejdenychPolicok = -1;
         vyhadzovanaFigurka->poziciaRiadok = -1;
         vyhadzovanaFigurka->poziciaStlpec = -1;
+        return 2;
     }
     cielovePolicko->jeNaMneHrac = 1;
+    cielovePolicko->figurkaHraca = figurka;
+    return 1;
 }
 
 char* dajFarbuHraca(HRAC* hrac) {

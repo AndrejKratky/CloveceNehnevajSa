@@ -83,7 +83,7 @@ HRAC* dajHraca(HRAC* zoznamHracov, int pocetHracov,int idHraca);
 
 void priradCestuFigurke(FIGURKA* figurka, FARBA_HRACA farba);
 
-void presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPlocha[11]);
+int presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPlocha[11]);
 
 char* dajFarbuHraca(HRAC* hrac);
 

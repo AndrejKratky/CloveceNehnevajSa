@@ -45,6 +45,7 @@ void* funServer(void* args) {
     int celkovySucetPriHode6 = 0;
     int pocetFigurokNaHracejPloche = 0;
     int hracHodil6;
+    int posun;
 
 
     while (koniecHry == 0) {
@@ -193,15 +194,35 @@ void* funServer(void* args) {
                                     break;
                                 }
                             }
-                            vyprazdniPolicko(&hraciaPlocha[posuvanaFigurka->poziciaRiadok][posuvanaFigurka->poziciaStlpec]);
-                            presunFigurku(posuvanaFigurka, celkovySucetPriHode6, posuvanaFigurka->figurkaID, hraciaPlocha);
-                            poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
-                            poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
-                            nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
 
-                            sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
-                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
-                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            vyprazdniPolicko(&hraciaPlocha[posuvanaFigurka->poziciaRiadok][posuvanaFigurka->poziciaStlpec]);
+
+
+                            posun = presunFigurku(posuvanaFigurka, celkovySucetPriHode6, posuvanaFigurka->figurkaID, hraciaPlocha);
+
+                            if (posun == 1) {
+                                poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                                poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                                nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                                sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            } else if (posun == 2) {
+                                poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                                poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                                nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                                sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d a vyhodil si nepriatelovi figurku.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            } else {
+                                sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", celkovySucetPriHode6);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            }
+
+
 
 
                         } else {
@@ -253,6 +274,33 @@ void* funServer(void* args) {
                             }
                         }
                         vyprazdniPolicko(&hraciaPlocha[posuvanaFigurka->poziciaRiadok][posuvanaFigurka->poziciaStlpec]);
+
+                        posun = presunFigurku(posuvanaFigurka, hodKockou, posuvanaFigurka->figurkaID, hraciaPlocha);
+
+                        if (posun == 1) {
+                            poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                            poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                            nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                            sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                        } else if (posun == 2) {
+                            poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                            poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                            nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                            sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d a vyhodil si nepriatelovi figurku.", posuvanaFigurka->figurkaID, hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                        } else {
+                            sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                        }
+
+
+                        /*
                         presunFigurku(posuvanaFigurka, hodKockou, posuvanaFigurka->figurkaID, hraciaPlocha);
                         poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
                         poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
@@ -261,6 +309,7 @@ void* funServer(void* args) {
                         sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, hodKockou);
                         vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                         cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                         */
                     }
                 } else {
                     if (hracHodil6 == 1) {
@@ -327,6 +376,34 @@ void* funServer(void* args) {
 
 
                             vyprazdniPolicko(&hraciaPlocha[posuvanaFigurka->poziciaRiadok][posuvanaFigurka->poziciaStlpec]);
+
+
+
+                            posun = presunFigurku(posuvanaFigurka, celkovySucetPriHode6, posuvanaFigurka->figurkaID, hraciaPlocha);
+
+                            if (posun == 1) {
+                                poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                                poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                                nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                                sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            } else if (posun == 2) {
+                                poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                                poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                                nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                                sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d a vyhodil si nepriatelovi figurku.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            } else {
+                                sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", celkovySucetPriHode6);
+                                vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                                cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            }
+
+                            /*
                             presunFigurku(posuvanaFigurka, celkovySucetPriHode6, posuvanaFigurka->figurkaID, hraciaPlocha);
                             poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
                             poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
@@ -335,6 +412,10 @@ void* funServer(void* args) {
                             sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, celkovySucetPriHode6);
                             vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                             cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                            */
+
+
+
                         } else {
                             printf("Hrac %s hodil 6! Presuva figurku na startovacie policko!\n", hracNaTahu->meno);
                             vypisHracovi("Presuvas figurku na startovacie policko!", hracNaTahu->newsockfd, "w");
@@ -361,6 +442,33 @@ void* funServer(void* args) {
                             }
                         }
                         vyprazdniPolicko(&hraciaPlocha[posuvanaFigurka->poziciaRiadok][posuvanaFigurka->poziciaStlpec]);
+
+                        posun = presunFigurku(posuvanaFigurka, hodKockou, posuvanaFigurka->figurkaID, hraciaPlocha);
+
+                        if (posun == 1) {
+                            poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                            poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                            nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                            sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                        } else if (posun == 2) {
+                            poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
+                            poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
+                            nastavObsahPolickaFigurka(&hraciaPlocha[poziciaRiadokHraciaPlocha][poziciaStlpecHraciaPlocha], hracNaTahu->farbaHraca, posuvanaFigurka);
+
+                            sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d a vyhodil si nepriatelovi figurku.", posuvanaFigurka->figurkaID, hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                        } else {
+                            sprintf(dataServer->buffer, "Nemozes sa pohnut o %d policok.", hodKockou);
+                            vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
+                            cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                        }
+
+
+                        /*
                         presunFigurku(posuvanaFigurka, hodKockou, posuvanaFigurka->figurkaID, hraciaPlocha);
                         poziciaRiadokHraciaPlocha = posuvanaFigurka->poziciaRiadok;
                         poziciaStlpecHraciaPlocha = posuvanaFigurka->poziciaStlpec;
@@ -369,6 +477,7 @@ void* funServer(void* args) {
                         sprintf(dataServer->buffer, "Posunul si figurku ID%d o %d.", posuvanaFigurka->figurkaID, hodKockou);
                         vypisHracovi(dataServer->buffer, hracNaTahu->newsockfd, "w");
                         cakajNaHraca(dataServer->buffer, hracNaTahu->newsockfd);
+                         */
                     }
                 }
 

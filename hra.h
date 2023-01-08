@@ -10,25 +10,26 @@
 #include "client.h"
 #include "server.h"
 
+typedef enum farba {
+    Cervena,
+    Modra,
+    Zelena,
+    Zlta
+} FARBA;
 typedef struct figurka {
     int figurkaID;
     int poziciaRiadok;
     int poziciaStlpec;
     int cestaFigurky[44][2];
     int pocetPrejdenychPolicok;
+    FARBA farbaFigurky;
 } FIGURKA;
-typedef enum farbaHraca {
-    Cervena,
-    Modra,
-    Zelena,
-    Zlta
-} FARBA_HRACA;
 typedef struct hrac {
     int id;
     char meno[256];
     FIGURKA* figurkyHraca;
     int pocetFiguriek;
-    FARBA_HRACA farbaHraca;
+    FARBA farbaHraca;
     int newsockfd;
 } HRAC;
 typedef enum typyPolicok {
@@ -61,7 +62,7 @@ char* dajRiadokPolicka(POLICKO* policko, int riadok);
 
 void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka);
 
-void nastavObsahPolickaFigurka(POLICKO* policko, FARBA_HRACA p_farba, FIGURKA* p_presuvanaFigurka);
+void nastavObsahPolickaFigurka(POLICKO* policko, FARBA p_farba, FIGURKA* p_presuvanaFigurka);
 
 void vyprazdniPolicko(POLICKO* policko);
 
@@ -77,7 +78,7 @@ void vycistiKonzolu();
 
 HRAC* dajHraca(HRAC* zoznamHracov, int pocetHracov,int idHraca);
 
-void priradCestuFigurke(FIGURKA* figurka, FARBA_HRACA farba);
+void priradCestuFigurke(FIGURKA* figurka, FARBA farba);
 
 int presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPlocha[11]);
 

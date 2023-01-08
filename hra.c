@@ -224,7 +224,7 @@ void nastavObsahPolicka(POLICKO* policko, TYP_POLICKA p_typPolicka) {
     }
 }
 
-void nastavObsahPolickaFigurka(POLICKO* policko, FARBA_HRACA p_farba, FIGURKA* p_presuvanaFigurka) {
+void nastavObsahPolickaFigurka(POLICKO* policko, FARBA p_farba, FIGURKA* p_presuvanaFigurka) {
     switch (p_farba) {
         case Cervena:
             policko->obsahPolicka[1][1] = 'R';
@@ -375,7 +375,7 @@ HRAC* dajHraca(HRAC* zoznamHracov, int pocetHracov,int idHraca) {
     return NULL;
 }
 
-void priradCestuFigurke(FIGURKA* figurka, FARBA_HRACA farba) {
+void priradCestuFigurke(FIGURKA* figurka, FARBA farba) {
     switch (farba) {
         case Cervena:
             figurka->cestaFigurky[0][0] = 4;
@@ -919,7 +919,7 @@ int presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPl
     tempPocetPrejdenychPolicok = figurka->pocetPrejdenychPolicok;
 
     if (figurka->pocetPrejdenychPolicok + oKolko > 43) {
-        return 3;
+        return 4;   // je nemozne posunut sa o tolko policok s figurkou
     }
 
     figurka->poziciaRiadok = figurka->cestaFigurky[tempPocetPrejdenychPolicok + oKolko][0];
@@ -928,18 +928,21 @@ int presunFigurku(FIGURKA* figurka, int oKolko, int figurkaID, POLICKO* hraciaPl
 
     POLICKO* cielovePolicko = &hraciaPlocha[figurka->poziciaRiadok][figurka->poziciaStlpec];
 
-
     FIGURKA* vyhadzovanaFigurka = NULL;
     if (cielovePolicko->jeNaMneHrac == 1) {
         vyhadzovanaFigurka = cielovePolicko->figurkaHraca;
         vyhadzovanaFigurka->pocetPrejdenychPolicok = -1;
         vyhadzovanaFigurka->poziciaRiadok = -1;
         vyhadzovanaFigurka->poziciaStlpec = -1;
-        return 2;
+        if (vyhadzovanaFigurka->farbaFigurky == figurka->farbaFigurky) {
+            return 3;   // vyhodenie vlastnej figurky
+        } else {
+            return 2;   // vyhodenie nepriatelskej figurky
+        }
     }
     cielovePolicko->jeNaMneHrac = 1;
     cielovePolicko->figurkaHraca = figurka;
-    return 1;
+    return 1;       // posunutie figurky
 }
 
 char* dajFarbuHraca(HRAC* hrac) {
